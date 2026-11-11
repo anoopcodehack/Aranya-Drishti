@@ -239,18 +239,18 @@ export const OperationsMap: React.FC<OperationsMapProps> = ({
   };
 
   return (
-    <div className="relative w-full h-full min-h-[460px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800/80 shadow-2xl">
+    <div className="relative w-full h-full min-h-[460px] bg-black rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl">
       {/* Map DOM Canvas */}
       <div ref={mapContainerRef} className="w-full h-full z-0" />
 
       {/* Top Floating Map Controls */}
       <div className="absolute top-3 left-3 z-[1000] flex items-center gap-2">
         {/* Layer Selector */}
-        <div className="flex items-center p-1 bg-slate-900/90 backdrop-blur border border-slate-800 rounded-lg shadow-lg">
+        <div className="flex items-center p-1 bg-black/90 backdrop-blur border border-zinc-800 rounded-lg shadow-xl">
           <button
             onClick={() => setActiveLayer('dark')}
             className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
-              activeLayer === 'dark' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+              activeLayer === 'dark' ? 'bg-emerald-600 text-white shadow-sm' : 'text-zinc-400 hover:text-white'
             }`}
             title="Dark Ops Contrast Map"
           >
@@ -259,7 +259,7 @@ export const OperationsMap: React.FC<OperationsMapProps> = ({
           <button
             onClick={() => setActiveLayer('satellite')}
             className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
-              activeLayer === 'satellite' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+              activeLayer === 'satellite' ? 'bg-emerald-600 text-white shadow-sm' : 'text-zinc-400 hover:text-white'
             }`}
             title="High-Resolution Satellite Imagery"
           >
@@ -268,7 +268,7 @@ export const OperationsMap: React.FC<OperationsMapProps> = ({
           <button
             onClick={() => setActiveLayer('terrain')}
             className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
-              activeLayer === 'terrain' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+              activeLayer === 'terrain' ? 'bg-emerald-600 text-white shadow-sm' : 'text-zinc-400 hover:text-white'
             }`}
             title="Western Ghats Topographic Elevation"
           >
@@ -279,10 +279,10 @@ export const OperationsMap: React.FC<OperationsMapProps> = ({
         {/* Radius Toggle */}
         <button
           onClick={() => setShowRings(!showRings)}
-          className={`px-2.5 py-1.5 text-xs font-medium rounded-lg border shadow-lg backdrop-blur flex items-center gap-1.5 transition-colors whitespace-nowrap ${
+          className={`px-2.5 py-1.5 text-xs font-medium rounded-lg border shadow-xl backdrop-blur flex items-center gap-1.5 transition-colors whitespace-nowrap ${
             showRings
-              ? 'bg-slate-900/90 border-emerald-500/50 text-emerald-400'
-              : 'bg-slate-900/90 border-slate-800 text-slate-400 hover:text-slate-200'
+              ? 'bg-black/90 border-emerald-500/60 text-emerald-400'
+              : 'bg-black/90 border-zinc-800 text-zinc-400 hover:text-white'
           }`}
           title="Toggle Acoustic Pickup Radius"
         >
@@ -293,7 +293,7 @@ export const OperationsMap: React.FC<OperationsMapProps> = ({
         {/* Recenter Map */}
         <button
           onClick={handleResetView}
-          className="p-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-emerald-400 shadow-lg backdrop-blur transition-colors"
+          className="p-1.5 rounded-lg bg-black/90 border border-zinc-800 text-zinc-300 hover:text-emerald-400 shadow-xl backdrop-blur transition-colors"
           title="Reset Western Ghats Center (Kudremukh Lat 13.133)"
         >
           <LocateFixed className="w-4 h-4" />
@@ -301,12 +301,12 @@ export const OperationsMap: React.FC<OperationsMapProps> = ({
       </div>
 
       {/* Legend & Sector Indicator Bottom-Left */}
-      <div className="absolute bottom-3 left-3 z-[1000] p-2.5 bg-slate-950/85 backdrop-blur-md border border-slate-800/80 rounded-lg shadow-xl text-xs space-y-1.5 max-w-[280px]">
-        <div className="flex items-center justify-between text-[11px] text-slate-400 border-b border-slate-800/60 pb-1">
-          <span className="font-semibold text-slate-200">Kudremukh Sentinel Grid</span>
-          <span className="font-mono text-emerald-400">5 / 5 Online</span>
+      <div className="absolute bottom-3 left-3 z-[1000] p-3 bg-black/90 backdrop-blur-md border border-zinc-800 rounded-xl shadow-2xl text-xs space-y-2 max-w-[280px]">
+        <div className="flex items-center justify-between text-[11px] text-zinc-400 border-b border-zinc-800 pb-1.5">
+          <span className="font-semibold text-white">Kudremukh Sentinel Grid</span>
+          <span className="font-mono text-emerald-400 font-bold">5 / 5 Online</span>
         </div>
-        <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-300">
+        <div className="grid grid-cols-2 gap-2 text-[10px] text-zinc-300">
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></span>
             <span>Nominal Patrol</span>
@@ -327,7 +327,7 @@ export const OperationsMap: React.FC<OperationsMapProps> = ({
       </div>
 
       {/* Node Quick-Selector Strip Top-Right */}
-      <div className="absolute top-3 right-3 z-[1000] hidden md:flex items-center gap-1 bg-slate-900/90 backdrop-blur p-1 rounded-lg border border-slate-800 shadow-lg">
+      <div className="absolute top-3 right-3 z-[1000] hidden md:flex items-center gap-1 bg-black/90 backdrop-blur p-1 rounded-lg border border-zinc-800 shadow-xl">
         {towers.map((tower) => (
           <button
             key={tower.id}
@@ -337,7 +337,7 @@ export const OperationsMap: React.FC<OperationsMapProps> = ({
                 ? 'bg-emerald-600 text-white font-bold'
                 : tower.status === 'alert'
                 ? 'bg-red-500/20 text-red-300 hover:bg-red-500/30'
-                : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800'
+                : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
             }`}
           >
             <span

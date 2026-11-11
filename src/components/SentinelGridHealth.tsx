@@ -16,16 +16,16 @@ export const SentinelGridHealth: React.FC<SentinelGridHealthProps> = ({
   onTriggerTestAcoustic,
 }) => {
   return (
-    <div className="w-full bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-xl space-y-3">
-      <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+    <div className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-2xl space-y-3">
+      <div className="flex items-center justify-between border-b border-zinc-800 pb-2.5">
         <div>
           <div className="flex items-center gap-2">
             <Radio className="w-4 h-4 text-emerald-400" />
-            <h2 className="text-sm font-bold tracking-tight text-slate-100 uppercase">
+            <h2 className="text-sm font-bold tracking-tight text-white uppercase">
               Sentinel Tower Array Telemetry
             </h2>
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-zinc-400">
             Autonomous acoustic surveillance towers across the Western Ghats Reserve perimeter.
           </p>
         </div>
@@ -45,15 +45,15 @@ export const SentinelGridHealth: React.FC<SentinelGridHealthProps> = ({
               onClick={() => onSelectTower(tower)}
               className={`p-3 rounded-xl border cursor-pointer transition-all flex flex-col justify-between space-y-2 ${
                 isSelected
-                  ? 'border-emerald-500 bg-slate-950 shadow-md ring-1 ring-emerald-500/50'
+                  ? 'border-emerald-500 bg-black shadow-md ring-1 ring-emerald-500/50'
                   : isAlert
                   ? 'border-red-500/60 bg-red-950/20 shadow-[0_0_12px_rgba(239,68,68,0.15)]'
-                  : 'border-slate-800/90 bg-slate-950/70 hover:border-slate-700 hover:bg-slate-950'
+                  : 'border-zinc-800 bg-black/80 hover:border-zinc-700 hover:bg-black'
               }`}
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-slate-100">
+                  <span className="text-xs font-mono font-bold text-white">
                     {tower.id}
                   </span>
                   <span
@@ -63,7 +63,7 @@ export const SentinelGridHealth: React.FC<SentinelGridHealthProps> = ({
                   />
                 </div>
 
-                <div className="text-[11px] font-semibold text-slate-300 mt-1 line-clamp-1">
+                <div className="text-[11px] font-semibold text-zinc-200 mt-1 line-clamp-1">
                   {tower.sector}
                 </div>
                 <div className="text-[10px] font-kannada text-emerald-400/90 truncate">
@@ -72,7 +72,7 @@ export const SentinelGridHealth: React.FC<SentinelGridHealthProps> = ({
               </div>
 
               {/* Hardware Telemetry stats */}
-              <div className="grid grid-cols-2 gap-1 text-[10px] font-mono text-slate-400 pt-1 border-t border-slate-800/70">
+              <div className="grid grid-cols-2 gap-1 text-[10px] font-mono text-zinc-400 pt-1 border-t border-zinc-800">
                 <div className="flex items-center gap-1">
                   <Battery className="w-3 h-3 text-emerald-400" />
                   <span>{tower.battery}%</span>
@@ -82,18 +82,18 @@ export const SentinelGridHealth: React.FC<SentinelGridHealthProps> = ({
                   <span>{tower.solarOutput}W</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Mountain className="w-3 h-3 text-slate-400" />
+                  <Mountain className="w-3 h-3 text-zinc-400" />
                   <span>{tower.elevation}m</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Signal className="w-3 h-3 text-sky-400" />
+                  <Signal className="w-3 h-3 text-white" />
                   <span>{tower.signalRssi} dBm</span>
                 </div>
               </div>
 
               {/* Quick Trigger Buttons */}
               <div
-                className="pt-2 border-t border-slate-800/60 flex items-center gap-1"
+                className="pt-2 border-t border-zinc-800 flex items-center gap-1"
                 onClick={(e) => e.stopPropagation()}
               >
                 <button

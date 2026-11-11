@@ -236,31 +236,31 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
   };
 
   return (
-    <div className="w-full bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-xl space-y-4">
+    <div className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-2xl space-y-4">
       {/* Module Title & Sentinel Target Selector */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-3">
         <div>
           <div className="flex items-center gap-2">
             <Radio className="w-4 h-4 text-emerald-400" />
-            <h2 className="text-sm font-bold tracking-tight text-slate-100 uppercase">
+            <h2 className="text-sm font-bold tracking-tight text-white uppercase">
               Acoustic Ingestion & Screening Module
             </h2>
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-zinc-400">
             Ingest live bioacoustic telemetry, upload WAV signatures, or run threat simulations.
           </p>
         </div>
 
         {/* Selected Sensor Node Selector */}
         <div className="flex items-center gap-2 text-xs">
-          <span className="text-slate-400 font-medium">Ingestion Tower:</span>
+          <span className="text-zinc-400 font-medium">Ingestion Tower:</span>
           <select
             value={selectedTower.id}
             onChange={(e) => {
               const found = towers.find((t) => t.id === e.target.value);
               if (found) onSelectTower(found);
             }}
-            className="bg-slate-950 border border-slate-700 text-slate-200 rounded-lg px-2.5 py-1 font-mono text-xs focus:outline-none focus:border-emerald-500"
+            className="bg-black border border-zinc-700 text-white rounded-lg px-2.5 py-1 font-mono text-xs focus:outline-none focus:border-emerald-500"
           >
             {towers.map((tower) => (
               <option key={tower.id} value={tower.id}>
@@ -273,9 +273,9 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
 
       {/* 3 Interactive Quick-Demo Sample Buttons */}
       <div className="space-y-1.5">
-        <div className="flex items-center justify-between text-xs text-slate-400">
-          <span className="font-semibold text-slate-300">Quick-Demo Soundboard (Click to Load & Test):</span>
-          <span className="text-[11px] text-emerald-400">Synthesized Western Ghats Bioacoustics</span>
+        <div className="flex items-center justify-between text-xs text-zinc-400">
+          <span className="font-semibold text-zinc-200">Quick-Demo Soundboard (Click to Load & Test):</span>
+          <span className="text-[11px] text-emerald-400 font-mono">Synthesized Western Ghats Bioacoustics</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -285,7 +285,7 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
             className={`p-3 rounded-xl border text-left transition-all relative overflow-hidden group ${
               activePreset === 'chainsaw'
                 ? 'bg-red-950/40 border-red-500/60 shadow-[0_0_15px_rgba(239,68,68,0.2)]'
-                : 'bg-slate-950/70 border-slate-800 hover:border-red-500/40 hover:bg-slate-950'
+                : 'bg-black/80 border-zinc-800 hover:border-red-500/40 hover:bg-black'
             }`}
           >
             <div className="flex items-center justify-between">
@@ -295,8 +295,8 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
               </span>
               <Volume2 className="w-3.5 h-3.5 text-red-400/80 group-hover:scale-110 transition-transform" />
             </div>
-            <p className="text-[11px] text-slate-300 font-medium mt-1">Illegal Logging Threat</p>
-            <p className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">
+            <p className="text-[11px] text-zinc-200 font-medium mt-1">Illegal Logging Threat</p>
+            <p className="text-[10px] text-zinc-400 mt-0.5 line-clamp-1">
               2-stroke mechanical scream (88-94% conf)
             </p>
           </button>
@@ -307,7 +307,7 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
             className={`p-3 rounded-xl border text-left transition-all relative overflow-hidden group ${
               activePreset === 'elephant'
                 ? 'bg-amber-950/40 border-amber-500/60 shadow-[0_0_15px_rgba(245,158,11,0.2)]'
-                : 'bg-slate-950/70 border-slate-800 hover:border-amber-500/40 hover:bg-slate-950'
+                : 'bg-black/80 border-zinc-800 hover:border-amber-500/40 hover:bg-black'
             }`}
           >
             <div className="flex items-center justify-between">
@@ -317,8 +317,8 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
               </span>
               <Volume2 className="w-3.5 h-3.5 text-amber-400/80 group-hover:scale-110 transition-transform" />
             </div>
-            <p className="text-[11px] text-slate-300 font-medium mt-1">Human-Wildlife Conflict</p>
-            <p className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">
+            <p className="text-[11px] text-zinc-200 font-medium mt-1">Human-Wildlife Conflict</p>
+            <p className="text-[10px] text-zinc-400 mt-0.5 line-clamp-1">
               Infrasound rumble & trumpet (91-96% conf)
             </p>
           </button>
@@ -329,7 +329,7 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
             className={`p-3 rounded-xl border text-left transition-all relative overflow-hidden group ${
               activePreset === 'ambient'
                 ? 'bg-emerald-950/40 border-emerald-500/60 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
-                : 'bg-slate-950/70 border-slate-800 hover:border-emerald-500/40 hover:bg-slate-950'
+                : 'bg-black/80 border-zinc-800 hover:border-emerald-500/40 hover:bg-black'
             }`}
           >
             <div className="flex items-center justify-between">
@@ -339,8 +339,8 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
               </span>
               <Volume2 className="w-3.5 h-3.5 text-emerald-400/80 group-hover:scale-110 transition-transform" />
             </div>
-            <p className="text-[11px] text-slate-300 font-medium mt-1">Normal Forest Baseline</p>
-            <p className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">
+            <p className="text-[11px] text-zinc-200 font-medium mt-1">Normal Forest Baseline</p>
+            <p className="text-[10px] text-zinc-400 mt-0.5 line-clamp-1">
               Monsoon rain & cicada canopy (95% conf)
             </p>
           </button>
@@ -350,13 +350,13 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
       {/* Alternative Input Methods: Live Mic & File Drag-and-Drop */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* Input Method A: Record Microphone */}
-        <div className="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3 flex items-center justify-between gap-3">
+        <div className="bg-black/70 border border-zinc-800 rounded-xl p-3 flex items-center justify-between gap-3">
           <div className="space-y-0.5">
-            <span className="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
-              <Mic className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="text-xs font-semibold text-white flex items-center gap-1.5">
+              <Mic className="w-3.5 h-3.5 text-emerald-400" />
               Live Microphone Capture
             </span>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-zinc-400">
               Record 3-second live microphone sample from local workstation.
             </p>
           </div>
@@ -367,7 +367,7 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
             className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center gap-2 whitespace-nowrap transition-colors shadow-md ${
               isRecordingMic
                 ? 'bg-red-600 text-white animate-pulse'
-                : 'bg-cyan-600/20 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-600/30'
+                : 'bg-zinc-800 border border-zinc-700 text-zinc-200 hover:bg-zinc-700 hover:text-white'
             }`}
           >
             <Mic className="w-4 h-4" />
@@ -385,13 +385,13 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
           className={`border-2 border-dashed rounded-xl p-3 cursor-pointer text-center transition-all flex items-center justify-center gap-3 ${
             dragActive
               ? 'border-emerald-400 bg-emerald-950/30'
-              : 'border-slate-800 hover:border-slate-700 bg-slate-950/40 hover:bg-slate-950/70'
+              : 'border-zinc-800 hover:border-zinc-600 bg-black/60 hover:bg-black'
           }`}
         >
-          <Upload className="w-4 h-4 text-slate-400" />
+          <Upload className="w-4 h-4 text-zinc-400" />
           <div className="text-xs text-left">
-            <span className="font-semibold text-slate-300">Upload .WAV / .MP3 audio</span>
-            <span className="text-slate-500 block text-[10px]">
+            <span className="font-semibold text-zinc-200">Upload .WAV / .MP3 audio</span>
+            <span className="text-zinc-500 block text-[10px]">
               Drag & drop acoustic file or browse local drive
             </span>
           </div>
@@ -417,7 +417,7 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
       />
 
       {/* Action Controls & AI Inference Engine Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-black p-3 rounded-xl border border-zinc-800">
         {/* Playback & Status Controls */}
         <div className="flex items-center gap-2.5 w-full sm:w-auto">
           <button
@@ -426,7 +426,7 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
             className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors shadow-sm ${
               isPlaying
                 ? 'bg-amber-600 text-white'
-                : 'bg-slate-800 hover:bg-slate-700 text-slate-100'
+                : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-100'
             }`}
           >
             {isPlaying ? (
@@ -442,7 +442,7 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
             )}
           </button>
 
-          <span className="text-[11px] text-slate-400 font-mono truncate max-w-[280px]">
+          <span className="text-[11px] text-zinc-400 font-mono truncate max-w-[280px]">
             {statusMessage}
           </span>
         </div>
@@ -477,17 +477,17 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-2">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-100 text-sm">
+              <span className="font-bold text-white text-sm">
                 {latestInference.title}
               </span>
-              <span className="text-slate-400 font-kannada">
+              <span className="text-zinc-400 font-kannada">
                 ({latestInference.titleKannada})
               </span>
             </div>
 
             {/* Confidence Score Pill */}
             <div className="flex items-center gap-2">
-              <span className="text-[11px] text-slate-400">Confidence Score:</span>
+              <span className="text-[11px] text-zinc-400">Confidence Score:</span>
               <span
                 className={`font-mono font-bold text-sm px-2 py-0.5 rounded ${
                   latestInference.confidence > 75
@@ -509,23 +509,23 @@ export const AudioIngestionModule: React.FC<AudioIngestionModuleProps> = ({
             </div>
           </div>
 
-          <p className="text-slate-300 text-[11px]">
+          <p className="text-zinc-300 text-[11px]">
             {latestInference.description}
           </p>
 
           {/* Spectral Telemetry Strip */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-[10px] text-slate-400">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-[10px] text-zinc-400">
             <div>
-              Peak Freq: <span className="text-slate-200">{latestInference.spectralFeatures.peakFrequencyHz} Hz</span>
+              Peak Freq: <span className="text-zinc-200">{latestInference.spectralFeatures.peakFrequencyHz} Hz</span>
             </div>
             <div>
-              Centroid: <span className="text-slate-200">{latestInference.spectralFeatures.spectralCentroidHz} Hz</span>
+              Centroid: <span className="text-zinc-200">{latestInference.spectralFeatures.spectralCentroidHz} Hz</span>
             </div>
             <div>
-              Infrasound Ratio: <span className="text-slate-200">{(latestInference.spectralFeatures.infrasonicEnergy * 100).toFixed(0)}%</span>
+              Infrasound Ratio: <span className="text-zinc-200">{(latestInference.spectralFeatures.infrasonicEnergy * 100).toFixed(0)}%</span>
             </div>
             <div>
-              SNR: <span className="text-slate-200">{latestInference.spectralFeatures.snrDb} dB</span>
+              SNR: <span className="text-zinc-200">{latestInference.spectralFeatures.snrDb} dB</span>
             </div>
           </div>
         </div>

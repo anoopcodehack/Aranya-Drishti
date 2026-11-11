@@ -42,12 +42,12 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
       const width = canvas.width;
       const height = canvas.height;
 
-      // Dark tactical grid background
-      ctx.fillStyle = '#060a12';
+      // Pure black canvas background (no blue tint)
+      ctx.fillStyle = '#000000';
       ctx.fillRect(0, 0, width, height);
 
-      // Draw subtle telemetry grid lines
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      // Draw subtle neutral grey telemetry grid lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
       ctx.lineWidth = 1;
       const gridStepX = width / 8;
       const gridStepY = height / 4;
@@ -186,25 +186,25 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
   }, [analyser, isActive, threatSeverity, viewMode]);
 
   return (
-    <div className="w-full bg-slate-950/90 border border-slate-800/90 rounded-xl overflow-hidden shadow-xl p-3 space-y-2">
+    <div className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl overflow-hidden shadow-xl p-3 space-y-2">
       {/* Visualizer Header */}
-      <div className="flex items-center justify-between text-xs border-b border-slate-800/80 pb-2">
+      <div className="flex items-center justify-between text-xs border-b border-zinc-800/80 pb-2">
         <div className="flex items-center gap-2">
-          <Activity className={`w-4 h-4 ${isActive ? 'text-emerald-400 animate-pulse' : 'text-slate-500'}`} />
-          <span className="font-semibold tracking-wide text-slate-200">
+          <Activity className={`w-4 h-4 ${isActive ? 'text-emerald-400 animate-pulse' : 'text-zinc-500'}`} />
+          <span className="font-semibold tracking-wide text-white">
             Real-Time Acoustic Telemetry
           </span>
-          <span className="text-[11px] text-slate-400 font-mono">
+          <span className="text-[11px] text-zinc-400 font-mono">
             {isActive ? 'STREAM ACTIVE' : 'STANDBY'}
           </span>
         </div>
 
         {/* View Toggle */}
-        <div className="flex items-center gap-1 bg-slate-900 p-0.5 rounded-lg border border-slate-800 text-[11px]">
+        <div className="flex items-center gap-1 bg-black p-0.5 rounded-lg border border-zinc-800 text-[11px]">
           <button
             onClick={() => setViewMode('dual')}
             className={`px-2 py-0.5 rounded transition-colors ${
-              viewMode === 'dual' ? 'bg-emerald-600 text-white font-medium' : 'text-slate-400 hover:text-slate-200'
+              viewMode === 'dual' ? 'bg-emerald-600 text-white font-medium' : 'text-zinc-400 hover:text-white'
             }`}
           >
             Dual View
@@ -212,7 +212,7 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
           <button
             onClick={() => setViewMode('waveform')}
             className={`px-2 py-0.5 rounded transition-colors ${
-              viewMode === 'waveform' ? 'bg-emerald-600 text-white font-medium' : 'text-slate-400 hover:text-slate-200'
+              viewMode === 'waveform' ? 'bg-emerald-600 text-white font-medium' : 'text-zinc-400 hover:text-white'
             }`}
           >
             Oscilloscope
@@ -220,7 +220,7 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
           <button
             onClick={() => setViewMode('spectrum')}
             className={`px-2 py-0.5 rounded transition-colors ${
-              viewMode === 'spectrum' ? 'bg-emerald-600 text-white font-medium' : 'text-slate-400 hover:text-slate-200'
+              viewMode === 'spectrum' ? 'bg-emerald-600 text-white font-medium' : 'text-zinc-400 hover:text-white'
             }`}
           >
             FFT Spectrum
@@ -229,7 +229,7 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
       </div>
 
       {/* Canvas */}
-      <div className="relative w-full h-32 md:h-36 rounded-lg overflow-hidden border border-slate-900 bg-[#060a12]">
+      <div className="relative w-full h-32 md:h-36 rounded-lg overflow-hidden border border-zinc-900 bg-black">
         <canvas
           ref={canvasRef}
           width={640}
@@ -238,19 +238,19 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
         />
 
         {/* HUD Overlay Stats */}
-        <div className="absolute top-2 right-2 flex items-center gap-3 text-[10px] font-mono bg-slate-950/80 backdrop-blur px-2 py-1 rounded border border-slate-800 text-slate-300">
+        <div className="absolute top-2 right-2 flex items-center gap-3 text-[10px] font-mono bg-black/85 backdrop-blur px-2.5 py-1 rounded border border-zinc-800 text-zinc-300">
           <div>
-            PEAK: <span className="text-emerald-400">{isActive ? `${detectedPeakFreq} Hz` : '---'}</span>
+            PEAK: <span className="text-emerald-400 font-bold">{isActive ? `${detectedPeakFreq} Hz` : '---'}</span>
           </div>
           <div>
-            LEVEL: <span className={currentDb > -12 ? 'text-red-400 font-bold' : 'text-slate-200'}>
+            LEVEL: <span className={currentDb > -12 ? 'text-red-400 font-bold' : 'text-white'}>
               {isActive ? `${currentDb} dBFS` : '---'}
             </span>
           </div>
         </div>
 
         {/* Acoustic Band Label */}
-        <div className="absolute bottom-1.5 left-2 text-[9px] font-mono text-slate-500 uppercase tracking-widest">
+        <div className="absolute bottom-1.5 left-2 text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
           20Hz (Infrasound) &larr;&mdash;&mdash;&mdash;&rarr; 8kHz (Ultrasound / Cicadas)
         </div>
       </div>

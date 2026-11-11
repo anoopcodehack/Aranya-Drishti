@@ -86,19 +86,19 @@ export const PatrolUnitsModal: React.FC<PatrolUnitsModalProps> = ({ isOpen, onCl
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[1400] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-      <div className="w-full max-w-2xl bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+    <div className="fixed inset-0 z-[1400] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+      <div className="w-full max-w-2xl bg-[#0e0e0e] border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
         {/* Header */}
-        <div className="p-4 sm:p-5 border-b border-slate-800 bg-slate-950 flex items-center justify-between">
+        <div className="p-4 sm:p-5 border-b border-zinc-800 bg-black flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="p-2 bg-emerald-500/20 text-emerald-400 rounded-lg border border-emerald-500/40">
               <Users className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-slate-100 uppercase tracking-wide">
+              <h2 className="text-sm font-bold text-white uppercase tracking-wide">
                 Karnataka Forest Department // Tactical Patrol Deployments
               </h2>
-              <p className="text-xs text-slate-400 font-kannada">
+              <p className="text-xs text-zinc-400 font-kannada">
                 ಪಶ್ಚಿಮ ಘಟ್ಟಗಳ ಅರಣ್ಯ ಸಂರಕ್ಷಣಾ ಗಸ್ತು ಪಡೆಗಳು
               </p>
             </div>
@@ -106,7 +106,7 @@ export const PatrolUnitsModal: React.FC<PatrolUnitsModalProps> = ({ isOpen, onCl
 
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 text-xs font-mono"
+            className="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-zinc-800 text-xs font-mono"
           >
             [CLOSE]
           </button>
@@ -123,7 +123,7 @@ export const PatrolUnitsModal: React.FC<PatrolUnitsModalProps> = ({ isOpen, onCl
                 className={`p-3.5 rounded-xl border transition-all ${
                   isDispatched
                     ? 'bg-amber-950/20 border-amber-500/50 shadow-sm'
-                    : 'bg-slate-950/70 border-slate-800'
+                    : 'bg-black border-zinc-800'
                 }`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-2">
@@ -132,12 +132,12 @@ export const PatrolUnitsModal: React.FC<PatrolUnitsModalProps> = ({ isOpen, onCl
                       <span className="font-mono text-xs font-bold text-emerald-400">
                         {unit.id}
                       </span>
-                      <span className="font-bold text-slate-100 text-xs">
+                      <span className="font-bold text-white text-xs">
                         {unit.name}
                       </span>
                     </div>
-                    <div className="text-[11px] text-slate-400">
-                      Call Sign: <span className="font-mono text-slate-200">{unit.callSign}</span> · Sector: {unit.sector}
+                    <div className="text-[11px] text-zinc-400">
+                      Call Sign: <span className="font-mono text-zinc-200">{unit.callSign}</span> · Sector: {unit.sector}
                     </div>
                   </div>
 
@@ -152,21 +152,21 @@ export const PatrolUnitsModal: React.FC<PatrolUnitsModalProps> = ({ isOpen, onCl
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-[11px] font-mono text-slate-300">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-[11px] font-mono text-zinc-300">
                   <div>
-                    <span className="text-[10px] text-slate-500 block">COMMANDER</span>
+                    <span className="text-[10px] text-zinc-500 block">COMMANDER</span>
                     <span>{unit.leadOfficer}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 block">STRENGTH</span>
+                    <span className="text-[10px] text-zinc-500 block">STRENGTH</span>
                     <span>{unit.personnelCount} Rangers</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 block">RADIO FREQ</span>
-                    <span className="text-sky-400">{unit.contactFreq}</span>
+                    <span className="text-[10px] text-zinc-500 block">RADIO FREQ</span>
+                    <span className="text-emerald-400">{unit.contactFreq}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 block">VEHICLE</span>
+                    <span className="text-[10px] text-zinc-500 block">VEHICLE</span>
                     <span className="truncate block" title={unit.vehicle}>{unit.vehicle}</span>
                   </div>
                 </div>
@@ -176,8 +176,8 @@ export const PatrolUnitsModal: React.FC<PatrolUnitsModalProps> = ({ isOpen, onCl
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-slate-800 bg-slate-950 flex items-center justify-between text-xs">
-          <span className="text-slate-400 font-mono">
+        <div className="p-4 border-t border-zinc-800 bg-black flex items-center justify-between text-xs">
+          <span className="text-zinc-400 font-mono">
             VHF Repeater: Kudremukh Peak (154.250 MHz Encrypted)
           </span>
           <button

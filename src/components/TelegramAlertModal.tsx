@@ -64,8 +64,8 @@ export const TelegramAlertModal: React.FC<TelegramAlertModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[1500] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-lg bg-slate-900 border border-slate-700/90 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-[1500] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="w-full max-w-lg bg-[#0e0e0e] border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
         {/* Modal Top Bar */}
         <div
           className={`px-4 py-3 border-b flex items-center justify-between ${
@@ -86,53 +86,53 @@ export const TelegramAlertModal: React.FC<TelegramAlertModalProps> = ({
               <span className="text-xs font-mono uppercase font-bold tracking-wider">
                 Western Ghats Broadcast Emergency
               </span>
-              <p className="text-[11px] text-slate-300">Bilingual Telegram & SMS Alert</p>
+              <p className="text-[11px] text-zinc-300">Bilingual Telegram & SMS Alert</p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+            className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Telegram App Simulated Screen Card */}
+        {/* Telegram App Simulated Screen Card (Pure Neutral Grey/Black) */}
         <div className="p-4 sm:p-5 space-y-4">
-          <div className="bg-[#17212b] rounded-xl border border-[#2b5278]/40 p-4 shadow-inner space-y-3">
+          <div className="bg-[#141414] rounded-xl border border-zinc-800 p-4 shadow-inner space-y-3">
             {/* Telegram Header */}
-            <div className="flex items-center justify-between border-b border-white/5 pb-2 text-xs">
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-2 text-xs">
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-full bg-emerald-700 flex items-center justify-center font-bold text-white text-xs shadow-sm">
                   🌲
                 </div>
                 <div>
-                  <span className="font-semibold text-slate-100 block">
+                  <span className="font-semibold text-white block">
                     Aranya-Drishti Alert Bot
                   </span>
-                  <span className="text-[10px] text-sky-400 font-mono">
+                  <span className="text-[10px] text-emerald-400 font-mono">
                     @kfd_acoustic_sentinel_bot · 1.4k subscribers
                   </span>
                 </div>
               </div>
-              <span className="text-[10px] font-mono text-slate-400">{currentAlert.timestamp}</span>
+              <span className="text-[10px] font-mono text-zinc-400">{currentAlert.timestamp}</span>
             </div>
 
             {/* Telegram Message Balloon */}
-            <div className="bg-[#1e2c3a] p-3.5 rounded-lg border border-white/5 space-y-2.5 text-xs">
+            <div className="bg-[#1c1c1c] p-3.5 rounded-lg border border-zinc-800 space-y-2.5 text-xs">
               {/* English Version */}
               <div className="space-y-1">
-                <span className="text-[10px] font-mono font-bold text-sky-300 tracking-wider">
+                <span className="text-[10px] font-mono font-bold text-emerald-400 tracking-wider">
                   [ENGLISH ADVISORY]
                 </span>
-                <p className="text-slate-100 font-medium leading-relaxed">
+                <p className="text-white font-medium leading-relaxed">
                   {currentAlert.englishMessage}
                 </p>
               </div>
 
               {/* Kannada Version */}
-              <div className="space-y-1 pt-2 border-t border-white/10">
+              <div className="space-y-1 pt-2 border-t border-zinc-800">
                 <span className="text-[10px] font-mono font-bold text-amber-300 tracking-wider">
                   [ಕನ್ನಡ ಪ್ರಕಟಣೆ / KANNADA BROADCAST]
                 </span>
@@ -142,9 +142,9 @@ export const TelegramAlertModal: React.FC<TelegramAlertModalProps> = ({
               </div>
 
               {/* Telegram Delivery Footer */}
-              <div className="flex items-center justify-between pt-1 text-[10px] text-slate-400 font-mono border-t border-white/5">
+              <div className="flex items-center justify-between pt-1 text-[10px] text-zinc-400 font-mono border-t border-zinc-800">
                 <span>📍 Sensor: {currentAlert.towerName}</span>
-                <span className="flex items-center gap-1 text-sky-400">
+                <span className="flex items-center gap-1 text-emerald-400">
                   <CheckCircle2 className="w-3 h-3" />
                   Sent to {currentAlert.recipientsCount} Beat Guards
                 </span>
@@ -153,10 +153,10 @@ export const TelegramAlertModal: React.FC<TelegramAlertModalProps> = ({
           </div>
 
           {/* Webhook Configuration Toggle */}
-          <div className="bg-slate-950/80 rounded-xl p-3 border border-slate-800 text-xs space-y-2">
+          <div className="bg-black rounded-xl p-3 border border-zinc-800 text-xs space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-slate-300 font-medium flex items-center gap-1.5">
-                <Settings className="w-3.5 h-3.5 text-slate-400" />
+              <span className="text-zinc-200 font-medium flex items-center gap-1.5">
+                <Settings className="w-3.5 h-3.5 text-zinc-400" />
                 Live Telegram Webhook Gateway
               </span>
               <button
@@ -168,9 +168,9 @@ export const TelegramAlertModal: React.FC<TelegramAlertModalProps> = ({
             </div>
 
             {showConfig && (
-              <div className="space-y-2 pt-2 border-t border-slate-800">
+              <div className="space-y-2 pt-2 border-t border-zinc-800">
                 <div>
-                  <label className="text-[10px] font-mono text-slate-400 block mb-0.5">
+                  <label className="text-[10px] font-mono text-zinc-400 block mb-0.5">
                     Telegram Bot Token (from @BotFather)
                   </label>
                   <input
@@ -178,12 +178,12 @@ export const TelegramAlertModal: React.FC<TelegramAlertModalProps> = ({
                     placeholder="123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ"
                     value={botToken}
                     onChange={(e) => setBotToken(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-xs text-slate-100 font-mono focus:border-emerald-500 focus:outline-none"
+                    className="w-full bg-[#18181b] border border-zinc-700 rounded px-2.5 py-1 text-xs text-white font-mono focus:border-emerald-500 focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-mono text-slate-400 block mb-0.5">
+                  <label className="text-[10px] font-mono text-zinc-400 block mb-0.5">
                     Chat ID or Channel Username (e.g. -10012345678 or @my_channel)
                   </label>
                   <input
@@ -191,14 +191,14 @@ export const TelegramAlertModal: React.FC<TelegramAlertModalProps> = ({
                     placeholder="-100192837465"
                     value={chatId}
                     onChange={(e) => setChatId(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-xs text-slate-100 font-mono focus:border-emerald-500 focus:outline-none"
+                    className="w-full bg-[#18181b] border border-zinc-700 rounded px-2.5 py-1 text-xs text-white font-mono focus:border-emerald-500 focus:outline-none"
                   />
                 </div>
               </div>
             )}
 
             {dispatchStatus && (
-              <div className="p-2 rounded bg-slate-900 border border-slate-700 text-[11px] text-slate-300 font-mono">
+              <div className="p-2 rounded bg-[#18181b] border border-zinc-700 text-[11px] text-zinc-300 font-mono">
                 {dispatchStatus}
               </div>
             )}
@@ -206,10 +206,10 @@ export const TelegramAlertModal: React.FC<TelegramAlertModalProps> = ({
         </div>
 
         {/* Modal Actions Footer */}
-        <div className="p-4 border-t border-slate-800 bg-slate-950 flex items-center justify-between gap-2">
+        <div className="p-4 border-t border-zinc-800 bg-black flex items-center justify-between gap-2">
           <button
             onClick={onClose}
-            className="px-3.5 py-2 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
+            className="px-3.5 py-2 text-xs font-semibold rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-colors"
           >
             Dismiss Alert
           </button>

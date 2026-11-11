@@ -82,9 +82,9 @@ export const IncidentDrawer: React.FC<IncidentDrawerProps> = ({
       />
 
       {/* Slide-over Drawer Right */}
-      <div className="fixed inset-y-0 right-0 z-[1300] w-full max-w-xl bg-slate-950 border-l border-slate-800 shadow-2xl flex flex-col justify-between overflow-y-auto">
+      <div className="fixed inset-y-0 right-0 z-[1300] w-full max-w-xl bg-black border-l border-zinc-800 shadow-2xl flex flex-col justify-between overflow-y-auto">
         {/* Drawer Header */}
-        <div className="p-4 sm:p-5 border-b border-slate-800 bg-slate-900/60 sticky top-0 z-10 backdrop-blur-md">
+        <div className="p-4 sm:p-5 border-b border-zinc-800 bg-[#0d0d0d] sticky top-0 z-10 backdrop-blur-md">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <span
@@ -97,10 +97,10 @@ export const IncidentDrawer: React.FC<IncidentDrawerProps> = ({
                 <AlertTriangle className="w-5 h-5" />
               </span>
               <div>
-                <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">
+                <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block">
                   Acoustic Incident Dossier // {incident.id}
                 </span>
-                <h2 className="text-base font-bold text-slate-100 leading-tight">
+                <h2 className="text-base font-bold text-white leading-tight">
                   {incident.title}
                 </h2>
               </div>
@@ -108,7 +108,7 @@ export const IncidentDrawer: React.FC<IncidentDrawerProps> = ({
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition-colors"
+              className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -122,9 +122,9 @@ export const IncidentDrawer: React.FC<IncidentDrawerProps> = ({
         {/* Drawer Body Content */}
         <div className="p-4 sm:p-5 space-y-5 flex-1">
           {/* Status & Confidence Badge Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-xs font-mono">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-[#121212] p-3 rounded-xl border border-zinc-800 text-xs font-mono">
             <div>
-              <span className="text-[10px] text-slate-500 block">THREAT SEVERITY</span>
+              <span className="text-[10px] text-zinc-500 block">THREAT SEVERITY</span>
               <span
                 className={`font-bold ${
                   isCritical ? 'text-red-400' : 'text-amber-400'
@@ -134,39 +134,39 @@ export const IncidentDrawer: React.FC<IncidentDrawerProps> = ({
               </span>
             </div>
             <div>
-              <span className="text-[10px] text-slate-500 block">AI CONFIDENCE</span>
-              <span className="text-slate-100 font-bold">{incident.confidence}%</span>
+              <span className="text-[10px] text-zinc-500 block">AI CONFIDENCE</span>
+              <span className="text-white font-bold">{incident.confidence}%</span>
             </div>
             <div>
-              <span className="text-[10px] text-slate-500 block">STATUS</span>
+              <span className="text-[10px] text-zinc-500 block">STATUS</span>
               <span className="text-emerald-400 font-semibold uppercase">
                 {incident.status.replace('_', ' ')}
               </span>
             </div>
             <div>
-              <span className="text-[10px] text-slate-500 block">TIME DETECTED</span>
-              <span className="text-slate-300">{incident.timestamp}</span>
+              <span className="text-[10px] text-zinc-500 block">TIME DETECTED</span>
+              <span className="text-zinc-300">{incident.timestamp}</span>
             </div>
           </div>
 
           {/* Embedded Audio Snippet Player */}
-          <div className="bg-slate-900/70 border border-slate-800 rounded-xl p-4 space-y-3">
+          <div className="bg-[#121212] border border-zinc-800 rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-white flex items-center gap-1.5">
                 <Volume2 className="w-4 h-4 text-emerald-400" />
                 Raw Acoustic Sensor Recording ({incident.audioDurationSec}s)
               </span>
-              <span className="text-[11px] font-mono text-slate-400">PCM 48kHz / 16-bit</span>
+              <span className="text-[11px] font-mono text-zinc-400">PCM 48kHz / 16-bit</span>
             </div>
 
             {/* Simulated Scrubber Bar */}
             <div className="space-y-1.5">
-              <div className="h-10 bg-slate-950 rounded-lg border border-slate-800/80 relative flex items-center px-3 overflow-hidden">
+              <div className="h-10 bg-black rounded-lg border border-zinc-800 relative flex items-center px-3 overflow-hidden">
                 <div
                   className="absolute inset-y-0 left-0 bg-emerald-500/20 border-r-2 border-emerald-400 transition-all"
                   style={{ width: isPlayingAudio ? '100%' : '35%', transitionDuration: isPlayingAudio ? `${incident.audioDurationSec}s` : '0s' }}
                 />
-                <div className="relative z-10 w-full flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <div className="relative z-10 w-full flex items-center justify-between text-[11px] font-mono text-zinc-400">
                   <span>00:0{isPlayingAudio ? '3' : '1'}</span>
                   <span className="text-emerald-400 tracking-widest text-[9px]">
                     {isElephant ? 'INFRASONIC ELEPHANT VOCALIZATION' : '2-STROKE CHAINSAW HARMONICS'}
@@ -186,7 +186,7 @@ export const IncidentDrawer: React.FC<IncidentDrawerProps> = ({
                 <span>{isPlayingAudio ? 'Stop Playback' : 'Replay Acoustic Snippet'}</span>
               </button>
 
-              <span className="text-[11px] text-slate-400 font-mono">
+              <span className="text-[11px] text-zinc-400 font-mono">
                 SNR: {incident.spectralFeatures.snrDb} dB · Peak: {incident.spectralFeatures.peakFrequencyHz} Hz
               </span>
             </div>

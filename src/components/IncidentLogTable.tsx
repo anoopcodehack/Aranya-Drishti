@@ -70,24 +70,24 @@ export const IncidentLogTable: React.FC<IncidentLogTableProps> = ({
   };
 
   return (
-    <div className="w-full bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-xl space-y-4">
+    <div className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-2xl space-y-4">
       {/* Header & Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-3">
         <div>
           <div className="flex items-center gap-2">
             <ShieldAlert className="w-4 h-4 text-emerald-400" />
-            <h2 className="text-sm font-bold tracking-tight text-slate-100 uppercase">
+            <h2 className="text-sm font-bold tracking-tight text-white uppercase">
               Western Ghats Acoustic Incident Log
             </h2>
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-zinc-400">
             Real-time acoustic event register across Kudremukh, Netravati, Kadaba & Shiradi sectors.
           </p>
         </div>
 
         <button
           onClick={handleExportCSV}
-          className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap self-start sm:self-auto"
+          className="px-3.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap self-start sm:self-auto border border-zinc-700"
         >
           <Download className="w-3.5 h-3.5" />
           <span>Export CSV Report</span>
@@ -98,20 +98,20 @@ export const IncidentLogTable: React.FC<IncidentLogTableProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
         {/* Search */}
         <div className="relative flex-1 min-w-[200px] max-w-sm">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search Tower ID, Sector, Threat..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-mono"
+            className="w-full bg-black border border-zinc-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
           />
         </div>
 
         {/* Filter Segmented Buttons */}
         <div className="flex items-center gap-2">
           {/* Threat Filter */}
-          <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+          <div className="flex items-center gap-1 bg-black p-1 rounded-lg border border-zinc-800">
             {['all', 'chainsaw', 'elephant', 'ambient'].map((type) => (
               <button
                 key={type}
@@ -119,7 +119,7 @@ export const IncidentLogTable: React.FC<IncidentLogTableProps> = ({
                 className={`px-2.5 py-1 rounded text-xs transition-colors capitalize ${
                   filterType === type
                     ? 'bg-emerald-600 text-white font-medium shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    : 'text-zinc-400 hover:text-white'
                 }`}
               >
                 {type === 'all' ? 'All Threats' : type}
@@ -131,7 +131,7 @@ export const IncidentLogTable: React.FC<IncidentLogTableProps> = ({
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="bg-slate-950 border border-slate-800 text-slate-300 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-emerald-500"
+            className="bg-black border border-zinc-800 text-zinc-300 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-emerald-500"
           >
             <option value="all">All Statuses</option>
             <option value="unacknowledged">Unacknowledged</option>
@@ -143,10 +143,10 @@ export const IncidentLogTable: React.FC<IncidentLogTableProps> = ({
       </div>
 
       {/* Table Content */}
-      <div className="overflow-x-auto rounded-lg border border-slate-800 bg-slate-950">
+      <div className="overflow-x-auto rounded-xl border border-zinc-800 bg-black">
         <table className="w-full text-left border-collapse text-xs">
           <thead>
-            <tr className="border-b border-slate-800 bg-slate-900/80 text-[11px] font-mono text-slate-400 uppercase">
+            <tr className="border-b border-zinc-800 bg-[#121212] text-[11px] font-mono text-zinc-400 uppercase">
               <th className="py-2.5 px-3">Event ID</th>
               <th className="py-2.5 px-3">Sentinel Node</th>
               <th className="py-2.5 px-3">Threat Signature</th>
@@ -156,10 +156,10 @@ export const IncidentLogTable: React.FC<IncidentLogTableProps> = ({
               <th className="py-2.5 px-3 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 font-sans">
+          <tbody className="divide-y divide-zinc-800/80 font-sans">
             {filteredIncidents.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-8 text-center text-slate-500">
+                <td colSpan={7} className="py-8 text-center text-zinc-500">
                   No acoustic incidents matching current filter criteria.
                 </td>
               </tr>
@@ -171,18 +171,18 @@ export const IncidentLogTable: React.FC<IncidentLogTableProps> = ({
                 return (
                   <tr
                     key={inc.id}
-                    className="hover:bg-slate-900/60 transition-colors group cursor-pointer"
+                    className="hover:bg-zinc-900/60 transition-colors group cursor-pointer"
                     onClick={() => onSelectIncident(inc)}
                   >
                     {/* Event ID */}
-                    <td className="py-3 px-3 font-mono font-medium text-slate-300">
+                    <td className="py-3 px-3 font-mono font-medium text-zinc-300">
                       {inc.id}
                     </td>
 
                     {/* Sentinel Node */}
                     <td className="py-3 px-3">
-                      <div className="font-mono font-bold text-slate-100">{inc.towerId}</div>
-                      <div className="text-[11px] text-slate-400">{inc.sector}</div>
+                      <div className="font-mono font-bold text-white">{inc.towerId}</div>
+                      <div className="text-[11px] text-zinc-400">{inc.sector}</div>
                     </td>
 
                     {/* Threat Signature */}
@@ -195,11 +195,11 @@ export const IncidentLogTable: React.FC<IncidentLogTableProps> = ({
                         ) : (
                           <TreePine className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                         )}
-                        <span className="font-medium text-slate-100 truncate max-w-[220px]">
+                        <span className="font-medium text-white truncate max-w-[220px]">
                           {inc.title}
                         </span>
                       </div>
-                      <div className="text-[10px] font-kannada text-slate-400 truncate max-w-[220px]">
+                      <div className="text-[10px] font-kannada text-zinc-400 truncate max-w-[220px]">
                         {inc.titleKannada}
                       </div>
                     </td>
@@ -214,7 +214,7 @@ export const IncidentLogTable: React.FC<IncidentLogTableProps> = ({
                         >
                           {inc.confidence}%
                         </span>
-                        <div className="w-12 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                        <div className="w-12 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
                           <div
                             className={`h-full rounded-full ${
                               isCrit ? 'bg-red-500' : isWarn ? 'bg-amber-500' : 'bg-emerald-500'
@@ -226,7 +226,7 @@ export const IncidentLogTable: React.FC<IncidentLogTableProps> = ({
                     </td>
 
                     {/* Timestamp */}
-                    <td className="py-3 px-3 font-mono text-slate-400 whitespace-nowrap">
+                    <td className="py-3 px-3 font-mono text-zinc-400 whitespace-nowrap">
                       {inc.timestamp}
                     </td>
 
@@ -237,7 +237,7 @@ export const IncidentLogTable: React.FC<IncidentLogTableProps> = ({
                           inc.status === 'unacknowledged'
                             ? 'bg-red-500/20 text-red-300 border border-red-500/40'
                             : inc.status === 'dispatched'
-                            ? 'bg-sky-500/20 text-sky-300 border border-sky-500/40'
+                            ? 'bg-zinc-800 text-emerald-400 border border-emerald-500/40'
                             : inc.status === 'acknowledged'
                             ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                             : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
@@ -252,7 +252,7 @@ export const IncidentLogTable: React.FC<IncidentLogTableProps> = ({
                       <div className="flex items-center justify-end gap-1.5">
                         <button
                           onClick={() => onSelectIncident(inc)}
-                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
+                          className="p-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 transition-colors"
                           title="Open Incident Dossier"
                         >
                           <Eye className="w-3.5 h-3.5" />
