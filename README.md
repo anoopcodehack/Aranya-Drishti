@@ -1,24 +1,27 @@
 # 🌲 Aranya-Drishti (ಅರಣ್ಯ ದೃಷ್ಟಿ)
-### Autonomous Acoustic Surveillance Command Center for the Western Ghats
+### Autonomous Acoustic Surveillance Command Center & Wildlife Biosphere Portal
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.0-61dafb.svg?style=flat-square&logo=react)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-8.3-646cff.svg?style=flat-square&logo=vite)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38b2ac.svg?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
 [![Leaflet](https://img.shields.io/badge/Leaflet-GIS_Mapping-199900.svg?style=flat-square&logo=leaflet)](https://leafletjs.com/)
+[![Web Audio API](https://img.shields.io/badge/Web_Audio_API-Synthesized_DSP-emerald.svg?style=flat-square)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg?style=flat-square)](LICENSE)
 
-> **Aranya-Drishti** (*Sanskrit / Kannada: "The Vision of the Forest"*) is an enterprise-grade autonomous acoustic intelligence dashboard engineered for forest divisions, anti-poaching squads, and rapid conflict mitigation teams across the UNESCO World Heritage Western Ghats reserve boundaries (Karnataka, India).
+> **Aranya-Drishti** (*Sanskrit / Kannada: "The Vision of the Forest" — See · Protect · Preserve*) is an enterprise-grade autonomous acoustic intelligence platform and conservation command center engineered for the Karnataka Forest Department (Kudremukh Wildlife Division). It combines an editorial wildlife sanctuary experience portal with real-time tactical surveillance, edge bioacoustic AI inference, and automated bilingual alert dispatch.
 
 ---
 
 ## 📑 Table of Contents
 
 - [Executive Overview](#-executive-overview)
+- [Enterprise Multi-View Architecture](#-enterprise-multi-view-architecture)
 - [System Architecture](#-system-architecture)
 - [Core Features & Engineering Highlights](#-core-features--engineering-highlights)
 - [Acoustic Sentinel Tower Grid (Kudremukh Perimeter)](#-acoustic-sentinel-tower-grid-kudremukh-perimeter)
 - [Bioacoustic Machine Learning & Classification Pipeline](#-bioacoustic-machine-learning--classification-pipeline)
+- [Client-Side Audio Synthesis Engine](#-client-side-audio-synthesis-engine)
 - [Getting Started / Local Development](#-getting-started--local-development)
   - [Prerequisites](#prerequisites)
   - [Installation & Startup](#installation--startup)
@@ -34,15 +37,57 @@
 
 ## 🎯 Executive Overview
 
-The Western Ghats of India house fragile tropical rainforest corridors subject to critical pressures:
+The Western Ghats of Karnataka (UNESCO World Heritage Site) house vulnerable tropical rainforest corridors subject to critical pressures:
 1. **Illegal Timber Felling**: Clandestine extraction of valuable indigenous timber (Rosewood, Teak, Sandalwood) utilizing high-RPM two-stroke motorized chainsaws.
 2. **Human-Elephant Conflict (HEC)**: Herds crossing fragmented buffer zones into agricultural arecanut, rubber, and paddy plantations near Kadaba and Shiradi, leading to crop damage and endangered animal retaliation.
 
-**Aranya-Drishti** resolves these challenges by operating as an automated **edge-to-cloud acoustic command platform**:
-- Ingests multi-spectral audio feeds from border acoustic towers.
-- Runs bioacoustic inference on frequency, zero-crossing rates, and infrasound ratios.
-- Renders high-contrast tactical GIS maps with real-time pulsing radar beacons.
-- Dispatches bilingual warnings (**English and Kannada**) to frontline beat rangers and village panchayats via instant push alerts and Telegram Webhooks.
+**Aranya-Drishti** delivers a unified company-grade platform:
+- **Public & Conservation Experience Portal**: An editorial wildlife sanctuary landing page inspired by world-class park platforms (Bearizona style), featuring high-impact visual design, an editorial white/light section, an interactive threat audio soundboard, and a protected fauna gallery.
+- **Real-Time Tactical Command Deck**: Embedded directly on the portal or accessible in full-screen console mode, rendering satellite GIS maps with pulsing radar beacons, live HTML5 Canvas oscilloscopes and FFT spectrums, incident triage drawers, and field strike unit rosters.
+- **Edge Bioacoustic AI Inference**: Classifies frequency, zero-crossing rates, and infrasonic energy ratios (<80 Hz) with a strict >75% confidence threshold.
+- **Bilingual Alert Dispatch**: Broadcasts synchronous warnings (**English & Kannada**) to beat guards and gram panchayats via instant notifications and optional Telegram Webhooks.
+
+---
+
+## 🏛️ Enterprise Multi-View Architecture
+
+Aranya-Drishti provides six distinct, production-ready operational views accessible from the top navigation bar:
+
+1. **`Overview` (Sanctuary & Conservation Portal - Bearizona Style)**:
+   - Full-bleed hero with wild Asian elephant imagery and editorial typography: *"It's Time To Protect The Wild"*.
+   - Floating white quick-cards strip: Perimeter Coverage, Sentinel Grid, AI Threat Engine, Ranger Strike Force.
+   - Editorial white section with Bengal Tiger portrait, bioacoustic engineering overview, and real-world metrics.
+   - 4-card interactive threat signature showcase with instant playback buttons.
+   - Embedded real-time operations console (Leaflet map + live audio visualizer + grid health + incident table).
+   - Nilgiri Biosphere conservation impact statistics.
+   - "Explore Protected Wildlife" gallery with bioacoustic voice simulations for iconic Western Ghats species.
+   - Emergency hotline & ranger strike fund banner.
+   - Enterprise multi-column footer with illuminated white logo capsule and 24/7 hotline directory.
+
+2. **`Operations Console` (Full-Screen Tactical Command Deck)**:
+   - Fullscreen Leaflet satellite map with dark ops, satellite, and terrain layers.
+   - 5 Sentinel towers with green calm radar vs red threat radar shockwave blips.
+   - Live Audio Ingestion Module with real-time HTML5 Canvas oscilloscope & 48-band FFT spectrum.
+   - 5-node telemetry cards with live voltage, solar wattage, signal, and quick drill triggers.
+   - Incident register table with CSV export.
+
+3. **`Audio Screening` (Bioacoustic Lab & Model Inspection)**:
+   - 3-second live microphone capture with interactive recording countdown.
+   - Drag-and-drop .WAV file decoder.
+   - 3 synthesized test presets (Chainsaw, Elephant rumble/trumpet, Monsoon rain/cicadas).
+   - Deep model parameter cards (ZCR filters, infrasound ratios, SNR targets).
+
+4. **`Incidents` (Forensic Incident Register)**:
+   - Searchable, filterable event log.
+   - Admissible evidence records under Section 27, Karnataka Forest Act 1963.
+   - Instant CSV dossier export for court filings.
+
+5. **`Patrol Units` (Field Strike Camps & Deployments)**:
+   - Anti-Poaching Camps (APC) and Elephant Task Force (ETF) roster.
+   - Ranger counts, lead officers, 4x4 vehicle specs, and encrypted VHF frequencies (154.250 MHz).
+
+6. **`Architecture` (Hardware & Engineering Specifications)**:
+   - Solar mast hardware blueprint, DSP pipeline specs, bilingual Telegram gateway, and legal frameworks.
 
 ---
 
@@ -89,10 +134,13 @@ The Western Ghats of India house fragile tropical rainforest corridors subject t
 
 | Feature | Tech Implementation | Benefit |
 | :--- | :--- | :--- |
+| **Wildlife Sanctuary Portal** | Editorial React Layout + High-Impact Wildlife Photography | Combines public conservation engagement with company-grade operational utility (Bearizona style). |
 | **Tactical Satellite GIS** | Leaflet.js + Custom SVG Markers + Dark Ops & Esri Tiles | Instant spatial awareness with concentric animated shockwave radar pings. |
 | **Synthetic Audio Engine** | Pure Web Audio API (Multi-oscillator Formant Synthesis) | Runs **100% out-of-the-box** with zero external audio assets or audio file dependencies. |
+| **Fauna Voice Simulators** | Elephant rumble, Bengal tiger roar, Macaque whoop | Authentic bioacoustic simulations for ranger training and public wildlife education. |
 | **Real-Time Visualizer** | HTML5 Canvas + `AnalyserNode` (Dual View) | Live oscilloscope waveform and 48-band FFT spectrum visualizer with dBFS meters. |
 | **Bilingual Dispatch** | UTF-8 Kannada + English Notification Module | Delivers immediate, accessible warnings to both senior officials and local villagers. |
+| **High-Visibility Logo** | Elevated pure white enclosure with shadow | 100% legibility of the official Aranya-Drishti forest & deer emblem on dark or light backgrounds. |
 | **Patrol Strike Roster** | Tactical deployment modal with ETA calculations | Coordinates rapid anti-poaching squads and Elephant Task Force (ETF) vehicles. |
 | **Evidence Dossier** | Filterable register with CSV report generation | Formats admissible records for documentation under the **Karnataka Forest Act 1963**. |
 
@@ -137,6 +185,25 @@ if (infrasonicEnergy > 0.65 || (peakFrequencyHz < 350 && zeroCrossingRate < 0.25
 - **Confidence Threshold Rule**:
   - $\text{Confidence} > 75\%$: Triggers instant **Priority Red Alert** with flashing radar blips and siren broadcast.
   - $\text{Confidence} \le 75\%$: Flags event for ranger review.
+
+---
+
+## 🔊 Client-Side Audio Synthesis Engine (`audioEngine.ts`)
+
+Aranya-Drishti operates **100% offline** in browser sandboxes using Web Audio API synthesis without requiring external audio downloads:
+
+1. **Two-Stroke Chainsaw Motor (`createChainsawBuffer`)**:
+   - Fundamental combustion rate swept between $75\text{ Hz}$ and $265\text{ Hz}$ with throttle modulation.
+   - Sawtooth oscillator with sub-harmonic engine cylinder rattles ($40 - 60\text{ Hz}$) and high-frequency tooth chatter ($5.2\times f_0$).
+2. **Asian Elephant Infrasound & Trumpet (`createElephantBuffer`)**:
+   - Subterranean chest rumbles ($18 - 32\text{ Hz}$) with visceral amplitude tremolo.
+   - Resonant trumpet formant glide ($220\text{ Hz} \to 480\text{ Hz} \to 310\text{ Hz}$) with brass-like harmonics and breath rasp.
+3. **Bengal Tiger Roar (`createTigerBuffer`)**:
+   - Deep guttural resonance ($60 - 120\text{ Hz}$) with throat rasp modulation and acoustic territorial projection.
+4. **Lion-Tailed Macaque Call (`createMacaqueBuffer`)**:
+   - Endemic arboreal canopy contact whoop frequency-swept between $650\text{ Hz}$ and $1,350\text{ Hz}$.
+5. **Monsoon Rain Canopy Baseline (`createAmbientBuffer`)**:
+   - Pinkish/brownian noise simulating steady rainfall and canopy wind, with high-frequency cicada bursts ($5,400\text{ Hz}$).
 
 ---
 
@@ -200,17 +267,25 @@ APP_URL="https://your-domain.run.app"
 ```
 .
 ├── .env.example                     # Environment template (no secrets committed)
-├── index.html                       # HTML5 entry point with Manrope & JetBrains Mono fonts
+├── index.html                       # HTML5 entry point (Fraunces, Manrope & JetBrains Mono fonts)
 ├── metadata.json                    # AI Studio manifest & microphone permissions
 ├── package.json                     # Project manifest and scripts
 ├── tsconfig.json                    # Strict TypeScript configuration
 ├── vite.config.ts                   # Vite bundler configuration with Tailwind v4 plugin
+├── public/
+│   └── assets/aistudio/
+│       └── image_033d2753.png       # Official Aranya-Drishti logo (See · Protect · Preserve)
 └── src/
     ├── main.tsx                     # React 19 root bootstrap
     ├── index.css                    # Tailwind CSS v4 directives & Leaflet dark ops styling
-    ├── App.tsx                      # Primary Command Center layout & Top Bar contract
+    ├── App.tsx                      # Primary Command Center & Bearizona-style Sanctuary Portal
+    ├── assets/images/
+    │   ├── hero_western_ghats_elephant_*.jpg  # High-impact elephant photography
+    │   ├── wildlife_bengal_tiger_*.jpg        # Bengal tiger sanctuary portrait
+    │   ├── forest_chainsaw_timber_*.jpg       # Chainsaw timber felling threat visual
+    │   └── canopy_monsoon_rainforest_*.jpg    # Monsoon canopy ambient rainforest
     ├── data/
-    │   └── towers.ts                # Sentinel towers array, GPS coordinates, initial incidents
+    │   └── towers.ts                # 5 Sentinel towers, GPS coordinates, initial incidents
     ├── utils/
     │   ├── audioEngine.ts           # Web Audio API engine (synthesizers, mic recorder, WAV encoder)
     │   └── inferenceEngine.ts       # Acoustic feature extraction, classification & Telegram dispatcher
