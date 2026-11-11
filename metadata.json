@@ -1,0 +1,6 @@
+{
+  "name": "Aranya-Drishti",
+  "description": "Autonomous Acoustic Surveillance Dashboard for Western Ghats Forest Rangers detecting illegal felling and elephant herd movements.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
