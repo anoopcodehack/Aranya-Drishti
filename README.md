@@ -39,7 +39,6 @@
 - [Directory & Component Layout](#-directory--component-layout)
 - [Bilingual Alerting & Telegram Gateway](#-bilingual-alerting--telegram-gateway)
 - [Standard Operating Procedure (SOP) & Legal Protocol](#-standard-operating-procedure-sop--legal-protocol)
-- [Company Software Development Standards](#-company-software-development-standards)
 - [License & Acknowledgments](#-license--acknowledgments)
 - [Project Team & Submission Details](#-project-team--submission-details)
 
@@ -51,7 +50,7 @@ The Western Ghats of Karnataka (UNESCO World Heritage Site) house vulnerable tro
 1. **Illegal Timber Felling**: Clandestine extraction of valuable indigenous timber (Rosewood, Teak, Sandalwood) utilizing high-RPM two-stroke motorized chainsaws.
 2. **Human-Elephant Conflict (HEC)**: Herds crossing fragmented buffer zones into agricultural arecanut, rubber, and paddy plantations near Kadaba and Shiradi, leading to crop damage and endangered animal retaliation.
 
-**Aranya-Drishti** delivers a unified company-grade platform:
+**Aranya-Drishti** delivers a unified autonomous platform:
 - **Public & Conservation Experience Portal**: An editorial wildlife sanctuary landing page inspired by world-class park platforms (Bearizona style), featuring high-impact visual design, an editorial white/light section, an interactive threat audio soundboard, and a protected fauna gallery.
 - **Real-Time Tactical Command Deck**: Embedded directly on the portal or accessible in full-screen console mode, rendering satellite GIS maps with pulsing radar beacons, live HTML5 Canvas oscilloscopes and FFT spectrums, incident triage drawers, and field strike unit rosters.
 - **Edge Bioacoustic AI Inference**: Classifies frequency, zero-crossing rates, and infrasonic energy ratios (<80 Hz) with a strict >75% confidence threshold.
@@ -144,7 +143,7 @@ Aranya-Drishti provides six distinct, production-ready operational views accessi
 
 | Feature | Tech Implementation | Benefit |
 | :--- | :--- | :--- |
-| **Wildlife Sanctuary Portal** | Editorial React Layout + High-Impact Wildlife Photography | Combines public conservation engagement with company-grade operational utility (Bearizona style). |
+| **Wildlife Sanctuary Portal** | Editorial React Layout + High-Impact Wildlife Photography | Combines public conservation engagement with operational forest surveillance utility. |
 | **Tactical Satellite GIS** | Leaflet.js + Custom SVG Markers + Dark Ops & Esri Tiles | Instant spatial awareness with concentric animated shockwave radar pings. |
 | **Synthetic Audio Engine** | Pure Web Audio API (Multi-oscillator Formant Synthesis) | Runs **100% out-of-the-box** with zero external audio assets or audio file dependencies. |
 | **Fauna Voice Simulators** | Elephant rumble, Bengal tiger roar, Macaque whoop | Authentic bioacoustic simulations for ranger training and public wildlife education. |
@@ -340,26 +339,6 @@ When an alert triggers in the field, rangers follow a 4-step workflow compliant 
   vibration detected       and replay snippet      unit (ETA 5-15 min)     CSV dossier for court
   at boundary tower.       in incident drawer.     via encrypted VHF.      evidence and FIR.
 ```
-
----
-
-## 🏢 Company Software Development Standards
-
-To maintain professional engineering hygiene, contributions must adhere to the following standards:
-
-1. **Zero-Pill Typography Discipline**:
-   - Avoid static decorative pill containers for metadata. Use clean unboxed text separated by typographic markers (`·`, `/`).
-2. **Strict Top Bar Contract**:
-   - The top navigation bar contains exactly three zones: `[Brand Wordmark]` — `[4-5 Single-line Links]` — `[1 Primary Action Button]`.
-3. **Compositor-Only Animations**:
-   - Animate only `transform`, `opacity`, and `filter`. Avoid layout thrashing on high-frequency audio visualizers.
-4. **Hermetic Out-of-the-Box Operation**:
-   - The project must build and run on any developer machine without external media hosts or proprietary local files.
-5. **Git Commit Format**:
-   - Follow [Conventional Commits](https://www.conventionalcommits.org/):
-     - `feat(audio): add Mel-frequency band classifier`
-     - `fix(map): correct marker pulse anchor position`
-     - `docs(readme): add enterprise deployment guidelines`
 
 ---
 
