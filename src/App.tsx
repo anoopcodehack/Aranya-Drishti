@@ -11,7 +11,7 @@ import { IncidentDrawer } from './components/IncidentDrawer';
 import { IncidentLogTable } from './components/IncidentLogTable';
 import { SentinelGridHealth } from './components/SentinelGridHealth';
 import { TelegramAlertModal, AlertNotificationData } from './components/TelegramAlertModal';
-import { PatrolUnitsModal } from './components/PatrolUnitsModal';
+import { PatrolUnitsModal, PATROL_UNITS_DATA } from './components/PatrolUnitsModal';
 import { audioEngine } from './utils/audioEngine';
 import { InferenceResult } from './utils/inferenceEngine';
 import {
@@ -29,6 +29,7 @@ import {
   MapPin,
   ChevronRight,
   Play,
+  Square,
   Shield,
   PhoneCall,
   Flame,
@@ -40,6 +41,16 @@ import {
   Globe,
   Sun,
   Battery,
+  Cpu,
+  FileText,
+  Server,
+  Zap,
+  HelpCircle,
+  Clock,
+  Terminal,
+  Ticket,
+  Maximize2,
+  Share2,
 } from 'lucide-react';
 
 // Official uploaded logo asset
@@ -51,7 +62,10 @@ import tigerPortraitImg from './assets/images/wildlife_bengal_tiger_179440358537
 import chainsawTimberImg from './assets/images/forest_chainsaw_timber_1794403586662.jpg';
 import canopyLandscapeImg from './assets/images/canopy_monsoon_rainforest_1794403586320.jpg';
 
+type ActiveViewMode = 'portal' | 'console' | 'playground' | 'incidents' | 'patrols' | 'architecture';
+
 export default function App() {
+  const [activeView, setActiveView] = useState<ActiveViewMode>('portal');
   const [towers, setTowers] = useState<SentinelTower[]>(() => {
     return SENTINEL_TOWERS.map((t) => {
       if (t.id === 'TOWER-C') {
@@ -68,15 +82,31 @@ export default function App() {
   const [currentTelegramAlert, setCurrentTelegramAlert] = useState<AlertNotificationData | null>(null);
   const [isPatrolModalOpen, setIsPatrolModalOpen] = useState<boolean>(false);
 
-  const operationsSectionRef = useRef<HTMLDivElement>(null);
-  const audioModuleRef = useRef<HTMLDivElement>(null);
-  const incidentsLogRef = useRef<HTMLDivElement>(null);
-  const towersSectionRef = useRef<HTMLDivElement>(null);
+  // Fauna audio preview state
+  const [playingFauna, setPlayingFauna] = useState<string | null>(null);
 
-  const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
-    if (ref.current) {
-      ref.current.scrollIntoView({ behavior: 'smooth' });
+  const handlePlayFaunaAudio = async (speciesKey: string) => {
+    if (playingFauna === speciesKey) {
+      audioEngine.stopPlayback();
+      setPlayingFauna(null);
+      return;
     }
+
+    setPlayingFauna(speciesKey);
+    let buf: AudioBuffer;
+    if (speciesKey === 'elephant') {
+      buf = await audioEngine.createElephantBuffer();
+    } else if (speciesKey === 'tiger') {
+      buf = await audioEngine.createTigerBuffer();
+    } else if (speciesKey === 'macaque') {
+      buf = await audioEngine.createMacaqueBuffer();
+    } else {
+      buf = await audioEngine.createAmbientBuffer();
+    }
+
+    audioEngine.playBuffer(buf, () => {
+      setPlayingFauna(null);
+    });
   };
 
   // Trigger audio threat drill
@@ -285,347 +315,887 @@ export default function App() {
   return (
     <div className="min-h-screen bg-black text-zinc-100 flex flex-col font-sans selection:bg-emerald-500/30 selection:text-emerald-300">
       {/* =========================================================================
-          TOP HEADER WITH OFFICIAL ARANYA-DRISHTI LOGO (High-Contrast Header)
+          TOP BANNER: Official Division Status
           ========================================================================= */}
-      <header className="absolute top-0 inset-x-0 z-[1100] px-5 sm:px-10 py-4 flex items-center justify-between gap-6 bg-gradient-to-b from-black via-black/85 to-transparent">
-        {/* Brand Logo Lockup */}
+      <div className="bg-[#080808] border-b border-zinc-800 text-[11px] font-mono text-zinc-400 py-1.5 px-4 sm:px-8 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="font-semibold text-zinc-200">
+            Karnataka Forest Dept · Kudremukh Wildlife Division
+          </span>
+          <span className="hidden md:inline text-zinc-500">|</span>
+          <span className="hidden md:inline text-zinc-400">Western Ghats Autonomous Acoustic Defense Array</span>
+        </div>
+        <div className="flex items-center gap-4 text-zinc-400">
+          <span className="hidden sm:inline">24/7 Helpline: <strong className="text-emerald-400">1926</strong></span>
+          <span>VHF: 154.250 MHz</span>
+          <span className="text-zinc-600">|</span>
+          <span className="text-emerald-400 font-bold">5/5 Nodes Active</span>
+        </div>
+      </div>
+
+      {/* =========================================================================
+          ENTERPRISE NAVBAR (With Crystal-Clear White Logo Container)
+          ========================================================================= */}
+      <header className="sticky top-0 z-[1100] px-4 sm:px-8 py-3 bg-[#0a0a0a]/95 border-b border-zinc-800 backdrop-blur-md flex items-center justify-between gap-4">
+        {/* Brand Identity with Prominent White Capsule for 100% Logo Visibility */}
         <div className="flex items-center gap-3">
-          <div className="p-1 rounded-xl bg-white/10 border border-white/20 backdrop-blur-md flex items-center gap-3 shadow-2xl">
+          <div
+            onClick={() => setActiveView('portal')}
+            className="cursor-pointer bg-white px-3 sm:px-4 py-1.5 rounded-xl shadow-lg border border-white flex items-center shrink-0 transition-transform hover:scale-105"
+          >
             <img
               src={ARANYA_LOGO_SRC}
-              alt="Aranya-Drishti — See · Protect · Preserve"
+              alt="Aranya-Drishti"
               referrerPolicy="no-referrer"
-              className="h-10 sm:h-12 w-auto object-contain rounded-lg"
+              className="h-8 sm:h-10 w-auto object-contain block"
             />
+          </div>
+          <div className="hidden lg:block border-l border-zinc-800 pl-3">
+            <span className="text-[10px] font-mono font-bold tracking-widest text-emerald-400 block uppercase">
+              See · Protect · Preserve
+            </span>
+            <span className="text-xs text-zinc-400 font-mono">
+              Autonomous Forest Surveillance
+            </span>
           </div>
         </div>
 
-        {/* Clean Center Navigation */}
-        <nav className="hidden lg:flex items-center gap-8 text-xs font-semibold tracking-wide text-zinc-200">
+        {/* View Switcher Navigation Tabs */}
+        <nav className="flex items-center gap-1 sm:gap-1.5 bg-[#121212] p-1 rounded-xl border border-zinc-800 text-xs font-medium overflow-x-auto max-w-full">
           <button
-            onClick={() => scrollToSection(operationsSectionRef)}
-            className="hover:text-emerald-400 transition-colors flex items-center gap-1.5"
+            onClick={() => setActiveView('portal')}
+            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap ${
+              activeView === 'portal'
+                ? 'bg-zinc-800 text-white shadow-sm font-semibold'
+                : 'text-zinc-400 hover:text-white'
+            }`}
           >
-            Operations Map
-            {alertTowerCount > 0 && <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />}
+            <TreePine className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Overview</span>
           </button>
+
           <button
-            onClick={() => scrollToSection(audioModuleRef)}
-            className="hover:text-emerald-400 transition-colors"
+            onClick={() => setActiveView('console')}
+            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap ${
+              activeView === 'console'
+                ? 'bg-zinc-800 text-white shadow-sm font-semibold'
+                : 'text-zinc-400 hover:text-white'
+            }`}
           >
-            Audio Screening
+            <Compass className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="hidden sm:inline">Operations Console</span>
+            <span className="sm:hidden">Console</span>
+            {alertTowerCount > 0 && (
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+            )}
           </button>
+
           <button
-            onClick={() => scrollToSection(towersSectionRef)}
-            className="hover:text-emerald-400 transition-colors"
+            onClick={() => setActiveView('playground')}
+            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap ${
+              activeView === 'playground'
+                ? 'bg-zinc-800 text-white shadow-sm font-semibold'
+                : 'text-zinc-400 hover:text-white'
+            }`}
           >
-            Sentinel Array
+            <Activity className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Audio Screening</span>
           </button>
+
           <button
-            onClick={() => scrollToSection(incidentsLogRef)}
-            className="hover:text-emerald-400 transition-colors"
+            onClick={() => setActiveView('incidents')}
+            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap ${
+              activeView === 'incidents'
+                ? 'bg-zinc-800 text-white shadow-sm font-semibold'
+                : 'text-zinc-400 hover:text-white'
+            }`}
           >
-            Incident Log ({incidents.length})
+            <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />
+            <span>Incidents ({incidents.length})</span>
           </button>
+
           <button
-            onClick={() => setIsPatrolModalOpen(true)}
-            className="hover:text-emerald-400 transition-colors flex items-center gap-1.5"
+            onClick={() => setActiveView('patrols')}
+            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap ${
+              activeView === 'patrols'
+                ? 'bg-zinc-800 text-white shadow-sm font-semibold'
+                : 'text-zinc-400 hover:text-white'
+            }`}
           >
             <Users className="w-3.5 h-3.5 text-zinc-400" />
-            <span>Patrol Roster</span>
+            <span className="hidden md:inline">Patrol Units</span>
+            <span className="md:hidden">Patrols</span>
+          </button>
+
+          <button
+            onClick={() => setActiveView('architecture')}
+            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap ${
+              activeView === 'architecture'
+                ? 'bg-zinc-800 text-white shadow-sm font-semibold'
+                : 'text-zinc-400 hover:text-white'
+            }`}
+          >
+            <Server className="w-3.5 h-3.5 text-zinc-400" />
+            <span className="hidden xl:inline">Architecture</span>
           </button>
         </nav>
 
-        {/* Action Button: Warm Amber Pill (matching "Tickets" in reference) */}
-        <div className="flex items-center gap-3">
+        {/* Action Controls */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button
             onClick={() => handleTriggerDrill('chainsaw')}
-            className="px-5 py-2.5 rounded-xl font-bold text-xs bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white shadow-xl shadow-orange-950/60 flex items-center gap-2 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white shadow-lg shadow-red-950/40 flex items-center gap-1.5 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+            title="Simulate acoustic chainsaw threat at Tower A"
           >
-            <AlertTriangle className="w-4 h-4 fill-current text-amber-100" />
-            <span>Simulate Threat Drill</span>
+            <AlertTriangle className="w-3.5 h-3.5 fill-current" />
+            <span className="hidden sm:inline">Simulate Threat Drill</span>
+            <span className="sm:hidden">Threat Drill</span>
           </button>
+
+          {activeView !== 'console' && (
+            <button
+              onClick={() => setActiveView('console')}
+              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg flex items-center gap-1.5 transition-all"
+            >
+              <Compass className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">Launch Console</span>
+            </button>
+          )}
         </div>
       </header>
 
       {/* =========================================================================
-          HERO BANNER SECTION (Deep Dramatic Nature Backdrop)
+          VIEW MODE 0: PORTAL OVERVIEW (The Bearizona-Style Solution Webpage)
           ========================================================================= */}
-      <section className="relative w-full min-h-[580px] lg:min-h-[660px] flex items-center overflow-hidden pt-24 pb-20 bg-black">
-        {/* Background Image: Majestic Asian Elephant in Western Ghats mist */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src={heroElephantImg}
-            alt="Majestic Western Ghats Wildlife"
-            referrerPolicy="no-referrer"
-            className="w-full h-full object-cover object-center scale-105 filter brightness-[0.75] contrast-[1.05]"
-          />
-          {/* Measured Pure Black Left Vignette Scrim */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/85 to-transparent w-full md:w-3/4 z-1" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50 z-1" />
-        </div>
-
-        {/* Hero Content Left */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 w-full">
-          <div className="max-w-2xl space-y-4">
-            {/* Live Sentinel Alert Pill Tag */}
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-black/85 border border-zinc-700 text-white text-xs font-mono shadow-xl backdrop-blur-md">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>5 / 5 Sentinel Towers Active · Western Ghats Perimeter</span>
-            </div>
-
-            {/* Headline matching Bearizona reference: "It's Time To / Protect the Wild" */}
-            <div className="space-y-0.5">
-              <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight">
-                It's Time To
-              </h1>
-              <h2 className="text-4xl sm:text-6xl lg:text-7xl font-serif italic text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-amber-200 leading-none py-1">
-                Protect the Wild
-              </h2>
-            </div>
-
-            <p className="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-xl">
-              Autonomous acoustic surveillance across 160,000 hectares of Kudremukh and Western Ghats rainforest.
-              Real-time bioacoustic neural screening detects illegal chainsaw motors and elephant herd vocalizations in seconds.
-            </p>
-
-            {/* Dual CTAs matching reference: Green primary + Amber secondary */}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <button
-                onClick={() => scrollToSection(operationsSectionRef)}
-                className="px-6 py-3 rounded-xl font-bold text-xs sm:text-sm bg-emerald-600 hover:bg-emerald-500 text-white shadow-xl shadow-emerald-950/60 transition-all flex items-center gap-2"
-              >
-                <Compass className="w-4 h-4" />
-                <span>Launch Operations Map</span>
-              </button>
-
-              <button
-                onClick={() => handleTriggerDrill('elephant')}
-                className="px-6 py-3 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white shadow-xl shadow-orange-950/60 transition-all flex items-center gap-2"
-              >
-                <Volume2 className="w-4 h-4" />
-                <span>Simulate Elephant Herd</span>
-              </button>
-            </div>
-
-            {/* Fast Telemetry Micro-Badges */}
-            <div className="flex items-center gap-4 pt-2 text-[11px] font-mono text-zinc-400">
-              <span className="flex items-center gap-1.5 text-zinc-300">
-                <Radio className="w-3.5 h-3.5 text-emerald-400" />
-                Infrasound Sub-Sensors (14–35 Hz)
-              </span>
-              <span>·</span>
-              <span className="flex items-center gap-1.5 text-zinc-300">
-                <Shield className="w-3.5 h-3.5 text-zinc-400" />
-                Anti-Poaching Rapid Strike
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Organic Wave Divider Transitioning to Clean White Section Below */}
-        <div className="absolute bottom-0 inset-x-0 z-20 pointer-events-none overflow-hidden leading-none">
-          <svg
-            className="w-full h-12 sm:h-16 text-[#f4f4f5] fill-current"
-            viewBox="0 0 1440 80"
-            preserveAspectRatio="none"
-          >
-            <path d="M0,32L48,37.3C96,43,192,53,288,58.7C384,64,480,64,576,53.3C672,43,768,21,864,21.3C960,21,1056,43,1152,48C1248,53,1344,43,1392,37.3L1440,32L1440,80L1392,80C1344,80,1248,80,1152,80C1056,80,960,80,864,80C768,80,672,80,576,80C480,80,384,80,288,80C192,80,96,80,48,80L0,80Z" />
-          </svg>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION 1: CRISP WHITE & LIGHT-GREY SECTION (Requested Contrast!)
-          4 Quick-Access Telemetry Cards (Matching Bearizona's Getting Here / Admissions)
-          ========================================================================= */}
-      <section className="relative z-30 bg-[#f4f4f5] text-zinc-900 px-6 sm:px-10 py-8 border-b border-zinc-300">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* 1. Sentinel Towers */}
-            <div
-              onClick={() => scrollToSection(towersSectionRef)}
-              className="p-5 rounded-2xl bg-white border border-zinc-200/80 hover:border-emerald-500 hover:shadow-xl transition-all cursor-pointer flex items-center gap-4 group shadow-sm"
-            >
-              <div className="w-13 h-13 rounded-full border-2 border-emerald-600/30 bg-emerald-50 flex items-center justify-center text-emerald-700 group-hover:scale-110 transition-transform shrink-0">
-                <Radio className="w-6 h-6" />
-              </div>
-              <div className="space-y-0.5">
-                <h3 className="text-sm font-extrabold text-zinc-900 group-hover:text-emerald-700 transition-colors">
-                  Sentinel Towers
-                </h3>
-                <p className="text-xs text-zinc-600 font-mono">5 Active Boundary Nodes</p>
-                <p className="text-[11px] text-emerald-700 font-semibold">100% Solar & VHF Linked</p>
-              </div>
-            </div>
-
-            {/* 2. Acoustic Screening */}
-            <div
-              onClick={() => scrollToSection(audioModuleRef)}
-              className="p-5 rounded-2xl bg-white border border-zinc-200/80 hover:border-emerald-500 hover:shadow-xl transition-all cursor-pointer flex items-center gap-4 group shadow-sm"
-            >
-              <div className="w-13 h-13 rounded-full border-2 border-zinc-300 bg-zinc-50 flex items-center justify-center text-zinc-800 group-hover:scale-110 transition-transform shrink-0">
-                <Activity className="w-6 h-6" />
-              </div>
-              <div className="space-y-0.5">
-                <h3 className="text-sm font-extrabold text-zinc-900 group-hover:text-emerald-700 transition-colors">
-                  Acoustic Screening
-                </h3>
-                <p className="text-xs text-zinc-600 font-mono">Real-Time Waveform FFT</p>
-                <p className="text-[11px] text-zinc-700 font-semibold">Mic · WAV · Soundboard</p>
-              </div>
-            </div>
-
-            {/* 3. Tactical GIS Map */}
-            <div
-              onClick={() => scrollToSection(operationsSectionRef)}
-              className="p-5 rounded-2xl bg-white border border-zinc-200/80 hover:border-amber-500 hover:shadow-xl transition-all cursor-pointer flex items-center gap-4 group shadow-sm"
-            >
-              <div className="w-13 h-13 rounded-full border-2 border-amber-600/30 bg-amber-50 flex items-center justify-center text-amber-700 group-hover:scale-110 transition-transform shrink-0">
-                <Compass className="w-6 h-6" />
-              </div>
-              <div className="space-y-0.5">
-                <h3 className="text-sm font-extrabold text-zinc-900 group-hover:text-amber-700 transition-colors">
-                  Operations Map
-                </h3>
-                <p className="text-xs text-zinc-600 font-mono">Kudremukh Lat 13.133°</p>
-                <p className="text-[11px] text-amber-700 font-semibold">Pulsing Radar Blips</p>
-              </div>
-            </div>
-
-            {/* 4. Emergency Alerts & Patrols */}
-            <div
-              onClick={() => setIsPatrolModalOpen(true)}
-              className="p-5 rounded-2xl bg-white border border-zinc-200/80 hover:border-orange-500 hover:shadow-xl transition-all cursor-pointer flex items-center gap-4 group shadow-sm"
-            >
-              <div className="w-13 h-13 rounded-full border-2 border-orange-600/30 bg-orange-50 flex items-center justify-center text-orange-700 group-hover:scale-110 transition-transform shrink-0">
-                <BellRing className="w-6 h-6" />
-              </div>
-              <div className="space-y-0.5">
-                <h3 className="text-sm font-extrabold text-zinc-900 group-hover:text-orange-700 transition-colors">
-                  Bilingual Dispatch
-                </h3>
-                <p className="text-xs text-zinc-600 font-mono">Telegram & SMS Gateway</p>
-                <p className="text-[11px] text-orange-700 font-kannada font-semibold">ಕನ್ನಡ & English Alerts</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION 2: CRISP WHITE SECTION (Matching "About Bearizona Wildlife Park")
-          Tiger Portrait + Clean Light Aesthetic
-          ========================================================================= */}
-      <section className="bg-white text-zinc-900 px-6 sm:px-10 py-16 border-b border-zinc-300">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          {/* Left: Framed High-Resolution Wildlife Photograph */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white aspect-[4/3] group bg-zinc-100 ring-1 ring-zinc-200">
+      {activeView === 'portal' && (
+        <div className="flex-1 flex flex-col">
+          {/* HERO SECTION (Bearizona exact style: dramatic wildlife hero + script headline + dual CTA buttons) */}
+          <section className="relative min-h-[620px] lg:min-h-[700px] flex items-center justify-center overflow-hidden border-b border-zinc-800">
+            {/* Background Elephant Photography */}
+            <div className="absolute inset-0 z-0">
               <img
-                src={tigerPortraitImg}
-                alt="Bengal Tiger in Western Ghats Reserve"
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                src={heroElephantImg}
+                alt="Western Ghats Asian Elephant Herd"
+                className="w-full h-full object-cover object-center filter brightness-[0.55] contrast-[1.1] scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent" />
-              <div className="absolute bottom-5 left-5 right-5 text-xs font-mono text-white">
-                <span className="font-bold text-amber-300 block text-sm">Royal Bengal Tiger Corridor</span>
-                <span className="text-zinc-200 text-[11px]">Sector 1 Shola Grassland Buffer · 24/7 Acoustic Guard</span>
-              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60" />
+              <div className="absolute inset-0 bg-radial-at-c from-transparent via-black/30 to-black/80" />
             </div>
-          </div>
 
-          {/* Right: Narrative Prose & Action Button */}
-          <div className="lg:col-span-7 space-y-5">
-            <div className="space-y-1">
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight">
-                <span className="font-serif italic text-emerald-700 font-normal mr-2">About</span>
-                Aranya-Drishti Acoustic Shield
-              </h2>
-              <p className="text-xs font-kannada text-emerald-800 font-semibold">
-                ಪಶ್ಚಿಮ ಘಟ್ಟಗಳ ಅರಣ್ಯ ಸಂರಕ್ಷಣಾ ಸ್ವಯಂಚಾಲಿತ ಅಕೌಸ್ಟಿಕ್ ಕಣ್ಗಾವಲು ವ್ಯವಸ್ಥೆ
+            {/* Hero Content Box */}
+            <div className="relative z-10 max-w-5xl mx-auto px-6 py-20 text-center space-y-6">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/70 border border-emerald-500/40 backdrop-blur-md text-emerald-400 text-xs font-mono font-bold tracking-wider uppercase shadow-xl">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Western Ghats UNESCO Biosphere Reserve · 160,000 Hectares</span>
+              </div>
+
+              {/* Editorial Display Typography (Bearizona "It's Time To Get Wild" style!) */}
+              <div className="space-y-1">
+                <h1 className="text-3xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight text-white uppercase font-sans">
+                  It's Time To
+                </h1>
+                <span className="block text-4xl sm:text-6xl lg:text-8xl italic font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-300 to-amber-200 py-1 drop-shadow-md">
+                  Protect The Wild
+                </span>
+              </div>
+
+              {/* Subtitle */}
+              <p className="max-w-2xl mx-auto text-sm sm:text-base lg:text-lg text-zinc-200 font-light leading-relaxed drop-shadow">
+                Autonomous acoustic intelligence and neural sensor network safeguarding the endangered ecosystems of the Western Ghats against illegal chainsaw timber felling and human-elephant conflict.
               </p>
+
+              {/* Dual CTA Buttons (Bearizona "Buy Tickets" / "Buy VIP Tickets" style!) */}
+              <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+                <button
+                  onClick={() => setActiveView('console')}
+                  className="px-6 sm:px-8 py-3.5 rounded-xl font-extrabold text-sm sm:text-base bg-emerald-600 hover:bg-emerald-500 text-white shadow-xl shadow-emerald-950/60 flex items-center gap-2.5 transition-all transform hover:scale-105 active:scale-95"
+                >
+                  <Compass className="w-5 h-5 text-emerald-200" />
+                  <span>Launch Operations Console</span>
+                </button>
+
+                <button
+                  onClick={() => handleTriggerDrill('chainsaw')}
+                  className="px-6 sm:px-8 py-3.5 rounded-xl font-extrabold text-sm sm:text-base bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-400 hover:to-amber-500 text-white shadow-xl shadow-orange-950/60 flex items-center gap-2.5 transition-all transform hover:scale-105 active:scale-95"
+                >
+                  <AlertTriangle className="w-5 h-5 text-white" />
+                  <span>Simulate Threat Drill</span>
+                </button>
+              </div>
+
+              {/* Status Indicator */}
+              <div className="pt-2 text-xs font-mono text-zinc-400 flex items-center justify-center gap-4">
+                <span>Lat: 13.133° N, 75.258° E</span>
+                <span>·</span>
+                <span className="text-emerald-400 font-semibold">All 5 Sentinel Masts Online</span>
+                <span>·</span>
+                <span>Sub-bass 14–35 Hz Active</span>
+              </div>
             </div>
+          </section>
 
-            <p className="text-zinc-700 text-sm sm:text-base leading-relaxed">
-              Spanning the rugged evergreen ridges from Kudremukh to Nagarhole, Aranya-Drishti monitors high-risk
-              corridors vulnerable to covert timber syndicates and human-wildlife encounters. Using high-frequency
-              combustion vibration filters, the system isolates illegal chainsaw felling within 4 seconds while
-              picking up 14–35 Hz infrasonic elephant rumbles before herds enter agricultural fringes.
-            </p>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-xs font-mono">
-              <div className="bg-[#f4f4f5] p-4 rounded-xl border border-zinc-200 shadow-sm">
-                <span className="text-[10px] text-zinc-500 block uppercase font-bold">ACOUSTIC RANGE</span>
-                <span className="text-base font-extrabold text-zinc-900">14.8 km Radius</span>
-              </div>
-              <div className="bg-[#f4f4f5] p-4 rounded-xl border border-zinc-200 shadow-sm">
-                <span className="text-[10px] text-zinc-500 block uppercase font-bold">AI INFERENCE</span>
-                <span className="text-base font-extrabold text-emerald-700">&lt; 700 ms Latency</span>
-              </div>
-              <div className="bg-[#f4f4f5] p-4 rounded-xl border border-zinc-200 shadow-sm">
-                <span className="text-[10px] text-zinc-500 block uppercase font-bold">ACCURACY</span>
-                <span className="text-base font-extrabold text-zinc-900">&gt; 91% Reliability</span>
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <button
-                onClick={() => scrollToSection(towersSectionRef)}
-                className="px-6 py-3 rounded-xl font-bold text-xs bg-zinc-900 hover:bg-zinc-800 text-white shadow-lg transition-all"
+          {/* FLOATING QUICK-INFO CARDS STRIP (Bearizona "Getting Here / Admissions / Park Map / FAQs" exact match!) */}
+          <div className="relative z-20 max-w-6xl mx-auto -mt-10 sm:-mt-14 px-4 sm:px-6 w-full">
+            <div className="bg-white rounded-2xl shadow-2xl border border-zinc-200 p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 text-zinc-900">
+              {/* Quick Card 1 */}
+              <div
+                onClick={() => setActiveView('console')}
+                className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-zinc-50 transition-colors cursor-pointer group"
               >
-                Inspect Sentinel Tower Array &rarr;
-              </button>
+                <div className="w-11 h-11 rounded-full bg-orange-100 border border-orange-200 flex items-center justify-center text-orange-600 shrink-0 group-hover:scale-110 transition-transform">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-zinc-900 group-hover:text-emerald-700 transition-colors">
+                    Perimeter Coverage
+                  </h3>
+                  <p className="text-xs text-zinc-500 mt-0.5">
+                    160,000 Hectares<br />
+                    Kudremukh Biosphere
+                  </p>
+                </div>
+              </div>
+
+              {/* Quick Card 2 */}
+              <div
+                onClick={() => setActiveView('console')}
+                className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-zinc-50 transition-colors cursor-pointer group"
+              >
+                <div className="w-11 h-11 rounded-full bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-700 shrink-0 group-hover:scale-110 transition-transform">
+                  <Radio className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-zinc-900 group-hover:text-emerald-700 transition-colors">
+                    Sentinel Grid
+                  </h3>
+                  <p className="text-xs text-zinc-500 mt-0.5">
+                    5 Autonomous Masts<br />
+                    Continuous Solar Power
+                  </p>
+                </div>
+              </div>
+
+              {/* Quick Card 3 */}
+              <div
+                onClick={() => setActiveView('playground')}
+                className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-zinc-50 transition-colors cursor-pointer group"
+              >
+                <div className="w-11 h-11 rounded-full bg-zinc-100 border border-zinc-300 flex items-center justify-center text-zinc-800 shrink-0 group-hover:scale-110 transition-transform">
+                  <Volume2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-zinc-900 group-hover:text-emerald-700 transition-colors">
+                    AI Threat Engine
+                  </h3>
+                  <p className="text-xs text-zinc-500 mt-0.5">
+                    Chainsaw & Infrasound<br />
+                    Strict &gt;75% Threshold
+                  </p>
+                </div>
+              </div>
+
+              {/* Quick Card 4 */}
+              <div
+                onClick={() => setIsPatrolModalOpen(true)}
+                className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-zinc-50 transition-colors cursor-pointer group"
+              >
+                <div className="w-11 h-11 rounded-full bg-orange-100 border border-orange-200 flex items-center justify-center text-orange-600 shrink-0 group-hover:scale-110 transition-transform">
+                  <Shield className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-zinc-900 group-hover:text-emerald-700 transition-colors">
+                    Ranger Strike Force
+                  </h3>
+                  <p className="text-xs text-zinc-500 mt-0.5">
+                    5 Rapid Patrol Camps<br />
+                    VHF 154.250 MHz Radio
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
+
+          {/* EDITORIAL WHITE / LIGHT SECTION: "About Aranya-Drishti" (Bearizona "About Bearizona Wildlife Park" style!) */}
+          <section className="bg-white text-zinc-900 py-20 px-6 sm:px-12 mt-12 border-b border-zinc-200">
+            <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+              {/* Left Photo: Bengal Tiger Portrait */}
+              <div className="lg:col-span-5 relative">
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-zinc-100">
+                  <img
+                    src={tigerPortraitImg}
+                    alt="Bengal Tiger in Western Ghats Sanctuary"
+                    className="w-full h-[420px] sm:h-[480px] object-cover object-center filter contrast-[1.05]"
+                  />
+                  <div className="absolute bottom-4 left-4 right-4 bg-black/80 backdrop-blur-md p-3.5 rounded-2xl text-white border border-white/20">
+                    <span className="text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-wider block">
+                      Protected Keystone Species
+                    </span>
+                    <span className="font-bold text-sm">Royal Bengal Tiger (Panthera tigris)</span>
+                    <span className="text-[11px] text-zinc-300 block">Kudremukh Rain Corridor · Acoustic Track Active</span>
+                  </div>
+                </div>
+
+                {/* Paw Print / Decorative Badge */}
+                <div className="absolute -top-4 -right-4 bg-emerald-600 text-white px-4 py-2 rounded-2xl shadow-xl text-xs font-bold font-mono">
+                  IUCN Red List Protected
+                </div>
+              </div>
+
+              {/* Right Content */}
+              <div className="lg:col-span-7 space-y-6">
+                <div>
+                  <span className="text-xs font-mono font-bold tracking-widest text-emerald-700 uppercase block mb-1">
+                    Autonomous Acoustic Intelligence
+                  </span>
+                  <h2 className="text-3xl sm:text-4xl font-extrabold text-zinc-950 tracking-tight">
+                    <span className="italic font-serif text-emerald-700 font-normal">About</span> Aranya-Drishti Bioacoustic Shield
+                  </h2>
+                </div>
+
+                <p className="text-sm sm:text-base text-zinc-700 leading-relaxed font-normal">
+                  Aranya-Drishti (<strong>ಅರಣ್ಯ ದೃಷ್ಟಿ</strong> — <em>Forest Vision</em>) is Karnataka's autonomous acoustic surveillance command platform deployed across the dense tropical rainforests of the Western Ghats. Powered by continuous 12V 40W monocrystalline solar masts, each sentinel node monitors acoustic signatures within a 3.5 km radius.
+                </p>
+
+                <p className="text-sm sm:text-base text-zinc-600 leading-relaxed font-normal">
+                  When illegal timber poachers rev a 2-stroke chainsaw motor, our neural DSP edge processor discriminates engine harmonic vibrations (110–260 Hz) from ambient wind in under <strong>800 milliseconds</strong>. Simultaneously, deep infrasonic geophones capture 14–35 Hz pachyderm rumbles to alert beat foresters and gram panchayat farmers before elephant herds wander into agricultural buffer fields.
+                </p>
+
+                {/* Key Metric Counters */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+                  <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200">
+                    <span className="text-2xl font-mono font-extrabold text-zinc-950 block">800 ms</span>
+                    <span className="text-[11px] text-zinc-500 font-mono">Alert Latency</span>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200">
+                    <span className="text-2xl font-mono font-extrabold text-emerald-700 block">93.4%</span>
+                    <span className="text-[11px] text-zinc-500 font-mono">Infrasound Acc.</span>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200">
+                    <span className="text-2xl font-mono font-extrabold text-amber-600 block">14–35 Hz</span>
+                    <span className="text-[11px] text-zinc-500 font-mono">Pachyderm Sub-Bass</span>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200">
+                    <span className="text-2xl font-mono font-extrabold text-zinc-950 block">5 Masts</span>
+                    <span className="text-[11px] text-zinc-500 font-mono">Solar Sentinel</span>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex flex-wrap items-center gap-3">
+                  <button
+                    onClick={() => setActiveView('console')}
+                    className="px-6 py-3 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-lg flex items-center gap-2"
+                  >
+                    <span>Inspect Sentinel Map</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    onClick={() => setIsPatrolModalOpen(true)}
+                    className="px-6 py-3 rounded-xl border border-zinc-300 hover:bg-zinc-100 text-zinc-800 font-bold text-xs uppercase tracking-wider transition-colors flex items-center gap-2"
+                  >
+                    <Users className="w-4 h-4" />
+                    <span>View Patrol Units</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* INTERACTIVE EXPERIENCE & THREAT SIGNATURES (Bearizona "Experience The Magic" style!) */}
+          <section className="bg-[#0a0a0a] text-white py-20 px-6 sm:px-12 border-b border-zinc-800">
+            <div className="max-w-6xl mx-auto space-y-12">
+              <div className="text-center max-w-2xl mx-auto space-y-2">
+                <span className="text-xs font-mono font-bold tracking-widest text-emerald-400 uppercase block">
+                  Bioacoustic Acoustic Signatures
+                </span>
+                <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
+                  <span className="italic font-serif text-emerald-400 font-normal">Experience</span> The Acoustic Grid
+                </h2>
+                <p className="text-xs sm:text-sm text-zinc-400">
+                  Click any card to play synthesized audio, test real-time FFT frequency response, or trigger live threat dispatches.
+                </p>
+              </div>
+
+              {/* 4 Interactive Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Card 1: Chainsaw Motor */}
+                <div className="bg-[#121212] border border-zinc-800 rounded-2xl overflow-hidden shadow-xl flex flex-col group hover:border-red-500/50 transition-all">
+                  <div className="h-44 overflow-hidden relative">
+                    <img
+                      src={chainsawTimberImg}
+                      alt="Chainsaw Illegal Timber Felling"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-red-600 text-white font-mono text-[10px] font-bold uppercase">
+                      Threat Signature
+                    </div>
+                  </div>
+                  <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                    <div>
+                      <h3 className="font-bold text-base text-white group-hover:text-red-400 transition-colors">
+                        Illegal Timber Felling
+                      </h3>
+                      <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                        Two-stroke chainsaw motor harmonics (110–260 Hz) and timber cutting tooth friction.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleTriggerDrill('chainsaw')}
+                      className="w-full py-2.5 px-3 rounded-xl bg-red-600/20 hover:bg-red-600 border border-red-500/50 hover:border-red-500 text-red-300 hover:text-white font-bold text-xs font-mono transition-all flex items-center justify-center gap-2"
+                    >
+                      <Play className="w-3.5 h-3.5 fill-current" />
+                      <span>Simulate Chainsaw Alert</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Card 2: Elephant Call */}
+                <div className="bg-[#121212] border border-zinc-800 rounded-2xl overflow-hidden shadow-xl flex flex-col group hover:border-amber-500/50 transition-all">
+                  <div className="h-44 overflow-hidden relative">
+                    <img
+                      src={heroElephantImg}
+                      alt="Asian Elephant Herd Infrasound"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-amber-600 text-white font-mono text-[10px] font-bold uppercase">
+                      Wildlife Corridor
+                    </div>
+                  </div>
+                  <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                    <div>
+                      <h3 className="font-bold text-base text-white group-hover:text-amber-400 transition-colors">
+                        Elephant Infrasound
+                      </h3>
+                      <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                        Subterranean 14–35 Hz chest rumbles and resonant trumpet formant calls.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleTriggerDrill('elephant')}
+                      className="w-full py-2.5 px-3 rounded-xl bg-amber-600/20 hover:bg-amber-600 border border-amber-500/50 hover:border-amber-500 text-amber-300 hover:text-white font-bold text-xs font-mono transition-all flex items-center justify-center gap-2"
+                    >
+                      <Play className="w-3.5 h-3.5 fill-current" />
+                      <span>Simulate Elephant Herd</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Card 3: Monsoon Rain */}
+                <div className="bg-[#121212] border border-zinc-800 rounded-2xl overflow-hidden shadow-xl flex flex-col group hover:border-emerald-500/50 transition-all">
+                  <div className="h-44 overflow-hidden relative">
+                    <img
+                      src={canopyLandscapeImg}
+                      alt="Western Ghats Monsoon Rain Canopy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-emerald-600 text-white font-mono text-[10px] font-bold uppercase">
+                      Ambient Baseline
+                    </div>
+                  </div>
+                  <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                    <div>
+                      <h3 className="font-bold text-base text-white group-hover:text-emerald-400 transition-colors">
+                        Monsoon Rain & Cicadas
+                      </h3>
+                      <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                        Continuous rainfall noise floor and 5.4 kHz cicada pulses calibrated out by filter.
+                      </p>
+                    </div>
+                    <button
+                      onClick={async () => {
+                        const buf = await audioEngine.createAmbientBuffer();
+                        audioEngine.playBuffer(buf);
+                      }}
+                      className="w-full py-2.5 px-3 rounded-xl bg-emerald-600/20 hover:bg-emerald-600 border border-emerald-500/50 hover:border-emerald-500 text-emerald-300 hover:text-white font-bold text-xs font-mono transition-all flex items-center justify-center gap-2"
+                    >
+                      <Volume2 className="w-3.5 h-3.5" />
+                      <span>Play Ambient Rain</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Card 4: Audio Screening Lab */}
+                <div className="bg-[#121212] border border-zinc-800 rounded-2xl overflow-hidden shadow-xl flex flex-col group hover:border-white/50 transition-all">
+                  <div className="h-44 bg-zinc-900 border-b border-zinc-800 flex items-center justify-center relative p-4">
+                    <Activity className="w-16 h-16 text-emerald-400 animate-pulse" />
+                    <div className="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-zinc-700 text-white font-mono text-[10px] font-bold uppercase">
+                      Live Ingestion
+                    </div>
+                  </div>
+                  <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                    <div>
+                      <h3 className="font-bold text-base text-white group-hover:text-emerald-400 transition-colors">
+                        Microphone Lab
+                      </h3>
+                      <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                        Capture 3 seconds of live microphone audio or drag & drop a .WAV audio file.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setActiveView('playground')}
+                      className="w-full py-2.5 px-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xs font-mono transition-all flex items-center justify-center gap-2"
+                    >
+                      <span>Open Screening Lab</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* EMBEDDED REAL LIVE OPERATIONS CONSOLE (The Real Solution Embedded Right On Homepage!) */}
+          <section className="bg-black text-white py-16 px-4 sm:px-8 border-b border-zinc-800 space-y-6">
+            <div className="max-w-[1600px] mx-auto space-y-6">
+              {/* Section Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Compass className="w-5 h-5 text-emerald-400" />
+                    <h2 className="text-xl sm:text-2xl font-extrabold text-white">
+                      Live Tactical Command Center
+                    </h2>
+                  </div>
+                  <p className="text-xs text-zinc-400 mt-0.5">
+                    Real-time Leaflet satellite tracking, active acoustic radar blips, and AI audio ingestion pipeline.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setActiveView('console')}
+                    className="px-4 py-2 rounded-xl text-xs font-bold bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700 flex items-center gap-2 transition-colors"
+                  >
+                    <Maximize2 className="w-3.5 h-3.5 text-zinc-400" />
+                    <span>Open Fullscreen Console</span>
+                  </button>
+                  <button
+                    onClick={() => handleTriggerDrill('chainsaw')}
+                    className="px-4 py-2 rounded-xl text-xs font-bold bg-red-600 hover:bg-red-500 text-white flex items-center gap-2 shadow-lg"
+                  >
+                    <AlertTriangle className="w-3.5 h-3.5" />
+                    <span>Trigger Threat Drill</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Operations Deck: Map (65%) + Audio Ingestion (35%) */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div className="lg:col-span-7 xl:col-span-8 h-[540px] lg:h-[620px]">
+                  <OperationsMap
+                    towers={towers}
+                    selectedTowerId={selectedTower.id}
+                    onSelectTower={handleSelectTower}
+                  />
+                </div>
+
+                <div className="lg:col-span-5 xl:col-span-4">
+                  <AudioIngestionModule
+                    towers={towers}
+                    selectedTower={selectedTower}
+                    onSelectTower={setSelectedTower}
+                    onThreatInference={handleThreatInference}
+                  />
+                </div>
+              </div>
+
+              {/* 5-Node Sentinel Grid Health Cards */}
+              <SentinelGridHealth
+                towers={towers}
+                selectedTowerId={selectedTower.id}
+                onSelectTower={handleSelectTower}
+                onTriggerTestAcoustic={(tower, type) => handleTriggerDrill(type, tower.id)}
+              />
+
+              {/* Incident Log Table */}
+              <IncidentLogTable
+                incidents={incidents}
+                onSelectIncident={handleSelectIncident}
+                onAcknowledge={handleAcknowledgeIncident}
+              />
+            </div>
+          </section>
+
+          {/* CONSERVATION IMPACT BANNER (Bearizona "Conservation Efforts" style!) */}
+          <section className="relative py-20 px-6 sm:px-12 bg-zinc-950 text-white border-b border-zinc-800 overflow-hidden">
+            <div className="max-w-6xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              <div className="lg:col-span-8 space-y-4">
+                <span className="text-xs font-mono font-bold tracking-widest text-emerald-400 uppercase block">
+                  Karnataka Forest Department Impact
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
+                  Preserving Biodiversity in the Nilgiri Biosphere
+                </h2>
+                <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed max-w-2xl">
+                  Over 5,400 Asian Elephants and 1,200 Bengal Tigers rely on Western Ghats migratory corridors. Aranya-Drishti provides proactive infrasonic alerting that eliminates tragic railway strikes and protects rural farm crops without harm to wildlife.
+                </p>
+                <div className="flex flex-wrap gap-6 pt-2 text-xs font-mono text-zinc-300">
+                  <div>
+                    <span className="text-xl font-bold text-emerald-400 block">100%</span>
+                    <span>Zero Undetected Felling</span>
+                  </div>
+                  <div>
+                    <span className="text-xl font-bold text-amber-400 block">24 Units</span>
+                    <span>Villager Alert Broadcasts</span>
+                  </div>
+                  <div>
+                    <span className="text-xl font-bold text-white block">Sec 27</span>
+                    <span>KFA 1963 Evidence Grade</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="lg:col-span-4 flex justify-start lg:justify-end">
+                <button
+                  onClick={() => setActiveView('incidents')}
+                  className="px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-xl flex items-center gap-2"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>View Forensic Incident Register</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {/* EXPLORE PROTECTED WILDLIFE CAROUSEL/GALLERY (Bearizona "Explore Our Animals" style!) */}
+          <section className="bg-black text-white py-20 px-6 sm:px-12 border-b border-zinc-800">
+            <div className="max-w-6xl mx-auto space-y-10">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div>
+                  <span className="text-xs font-mono font-bold tracking-widest text-emerald-400 uppercase block">
+                    Bioacoustic Fauna
+                  </span>
+                  <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
+                    <span className="italic font-serif text-emerald-400 font-normal">Explore</span> Protected Fauna
+                  </h2>
+                </div>
+                <p className="text-xs text-zinc-400 max-w-sm">
+                  Click the speaker buttons to listen to bioacoustic voice simulations calibrated for sentinel node identification.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Animal 1: Asian Elephant */}
+                <div className="bg-[#121212] border border-zinc-800 rounded-2xl p-5 space-y-4 hover:border-emerald-500/50 transition-all flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 uppercase">
+                        Vulnerable
+                      </span>
+                      <span className="text-[10px] font-mono text-zinc-500">14–35 Hz</span>
+                    </div>
+                    <h3 className="font-bold text-lg text-white">Asian Elephant</h3>
+                    <p className="text-xs italic text-zinc-400">Elephas maximus</p>
+                    <p className="text-xs text-zinc-300 leading-relaxed">
+                      Deep seismic infrasonic rumbles transmitting up to 10 kilometers across subterranean river basins.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handlePlayFaunaAudio('elephant')}
+                    className={`w-full py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all ${
+                      playingFauna === 'elephant'
+                        ? 'bg-amber-600 text-white'
+                        : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
+                    }`}
+                  >
+                    {playingFauna === 'elephant' ? <Square className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+                    <span>{playingFauna === 'elephant' ? 'Playing Infrasound...' : 'Play Infrasound Voice'}</span>
+                  </button>
+                </div>
+
+                {/* Animal 2: Bengal Tiger */}
+                <div className="bg-[#121212] border border-zinc-800 rounded-2xl p-5 space-y-4 hover:border-emerald-500/50 transition-all flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-500/20 text-red-300 border border-red-500/40 uppercase">
+                        Endangered
+                      </span>
+                      <span className="text-[10px] font-mono text-zinc-500">60–120 Hz</span>
+                    </div>
+                    <h3 className="font-bold text-lg text-white">Royal Bengal Tiger</h3>
+                    <p className="text-xs italic text-zinc-400">Panthera tigris</p>
+                    <p className="text-xs text-zinc-300 leading-relaxed">
+                      Territorial chuffs and low-frequency guttural roars recorded at Kudremukh high-altitude shola grasslands.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handlePlayFaunaAudio('tiger')}
+                    className={`w-full py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all ${
+                      playingFauna === 'tiger'
+                        ? 'bg-red-600 text-white'
+                        : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
+                    }`}
+                  >
+                    {playingFauna === 'tiger' ? <Square className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+                    <span>{playingFauna === 'tiger' ? 'Playing Roar...' : 'Play Tiger Roar'}</span>
+                  </button>
+                </div>
+
+                {/* Animal 3: Lion-Tailed Macaque */}
+                <div className="bg-[#121212] border border-zinc-800 rounded-2xl p-5 space-y-4 hover:border-emerald-500/50 transition-all flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 uppercase">
+                        Endangered
+                      </span>
+                      <span className="text-[10px] font-mono text-zinc-500">650–1350 Hz</span>
+                    </div>
+                    <h3 className="font-bold text-lg text-white">Lion-Tailed Macaque</h3>
+                    <p className="text-xs italic text-zinc-400">Macaca silenus</p>
+                    <p className="text-xs text-zinc-300 leading-relaxed">
+                      Endemic arboreal primates producing distinct contact whoops high in the evergreen rainforest canopy.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handlePlayFaunaAudio('macaque')}
+                    className={`w-full py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all ${
+                      playingFauna === 'macaque'
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
+                    }`}
+                  >
+                    {playingFauna === 'macaque' ? <Square className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+                    <span>{playingFauna === 'macaque' ? 'Playing Call...' : 'Play Macaque Call'}</span>
+                  </button>
+                </div>
+
+                {/* Animal 4: Indian Leopard */}
+                <div className="bg-[#121212] border border-zinc-800 rounded-2xl p-5 space-y-4 hover:border-emerald-500/50 transition-all flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-700 text-zinc-200 uppercase">
+                        Vulnerable
+                      </span>
+                      <span className="text-[10px] font-mono text-zinc-500">180–320 Hz</span>
+                    </div>
+                    <h3 className="font-bold text-lg text-white">Indian Leopard</h3>
+                    <p className="text-xs italic text-zinc-400">Panthera pardus fusca</p>
+                    <p className="text-xs text-zinc-300 leading-relaxed">
+                      Stealth nocturnal feline producing characteristic sawing rasp vocalizations along buffer ridges.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handlePlayFaunaAudio('rain')}
+                    className={`w-full py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all ${
+                      playingFauna === 'rain'
+                        ? 'bg-zinc-600 text-white'
+                        : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
+                    }`}
+                  >
+                    {playingFauna === 'rain' ? <Square className="w-3.5 h-3.5 fill-current" /> : <Volume2 className="w-3.5 h-3.5" />}
+                    <span>{playingFauna === 'rain' ? 'Playing Habitat...' : 'Play Habitat Sound'}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* RANGER SUPPORT & EMERGENCY HELPLINE (Bearizona "Shop 2 Give" banner style!) */}
+          <section className="bg-gradient-to-r from-emerald-950 via-zinc-950 to-black text-white py-16 px-6 sm:px-12 border-b border-zinc-800">
+            <div className="max-w-6xl mx-auto rounded-3xl bg-zinc-900/90 border border-emerald-500/30 p-8 sm:p-12 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
+              <div className="space-y-3 max-w-xl">
+                <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-mono text-xs font-bold uppercase inline-block border border-emerald-500/40">
+                  24/7 Karnataka Forest Control Room
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+                  Statewide Wildlife Emergency: Dial 1926
+                </h3>
+                <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                  Report illegal chainsaw logging, timber transport, or wild elephant sightings immediately. Direct encrypted dispatch to Kudremukh Strike Patrol Camps on VHF 154.250 MHz.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+                <button
+                  onClick={() => setIsPatrolModalOpen(true)}
+                  className="px-6 py-3.5 rounded-xl bg-white hover:bg-zinc-100 text-black font-extrabold text-xs uppercase tracking-wider transition-colors shadow-xl flex items-center gap-2"
+                >
+                  <Users className="w-4 h-4" />
+                  <span>View Patrol Strike Camps</span>
+                </button>
+
+                <button
+                  onClick={() => handleTriggerDrill('chainsaw')}
+                  className="px-6 py-3.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-extrabold text-xs uppercase tracking-wider transition-colors shadow-xl flex items-center gap-2"
+                >
+                  <AlertTriangle className="w-4 h-4" />
+                  <span>Run Incident Simulation</span>
+                </button>
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
+      )}
 
       {/* =========================================================================
-          SECTION 3: HIGH-TECH TACTICAL OPERATIONS CENTER (Deep Charcoal/Black Backdrop)
-          Where the Leaflet Map & Audio Visualizer have maximum glowing contrast!
+          VIEW MODE 1: OPERATIONS CONSOLE (Real-Time Tactical Command Deck)
           ========================================================================= */}
-      <section
-        ref={operationsSectionRef}
-        className="bg-[#0a0a0a] text-zinc-100 px-6 sm:px-10 py-16 border-b border-zinc-800"
-      >
-        <div className="max-w-7xl mx-auto space-y-6">
-          {/* Section Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-zinc-800 pb-4">
-            <div>
-              <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest block font-bold">
-                TACTICAL OPERATIONS HEADQUARTERS
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                <span className="font-serif italic text-amber-400 font-normal mr-2">Experience</span>
-                The Live Acoustic Grid
-              </h2>
+      {activeView === 'console' && (
+        <main className="flex-1 max-w-[1600px] w-full mx-auto p-4 sm:p-6 space-y-6">
+          {/* Executive KPI & Fleet Telemetry Strip */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="p-4 rounded-2xl bg-[#0e0e0e] border border-zinc-800 shadow-md flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block font-bold">
+                  PERIMETER COVERAGE
+                </span>
+                <span className="text-xl sm:text-2xl font-mono font-extrabold text-white">160,000 Ha</span>
+                <span className="text-[11px] text-emerald-400 block font-mono mt-0.5">Kudremukh Biosphere</span>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-700/60 flex items-center justify-center text-emerald-400">
+                <Compass className="w-5 h-5" />
+              </div>
             </div>
 
-            {/* Quick Drill Action Strip */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => handleTriggerDrill('chainsaw', 'TOWER-A')}
-                className="px-3.5 py-2 rounded-xl bg-red-950/40 border border-red-500/40 text-red-300 hover:bg-red-900/50 text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm"
-              >
-                <AlertTriangle className="w-3.5 h-3.5" />
-                <span>Test Chainsaw Drill</span>
-              </button>
-              <button
-                onClick={() => handleTriggerDrill('elephant', 'TOWER-C')}
-                className="px-3.5 py-2 rounded-xl bg-amber-950/40 border border-amber-500/40 text-amber-300 hover:bg-amber-900/50 text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm"
-              >
-                <Volume2 className="w-3.5 h-3.5" />
-                <span>Test Elephant Drill</span>
-              </button>
+            <div className="p-4 rounded-2xl bg-[#0e0e0e] border border-zinc-800 shadow-md flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block font-bold">
+                  ACTIVE ALERT STATUS
+                </span>
+                <span className={`text-xl sm:text-2xl font-mono font-extrabold ${alertTowerCount > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+                  {alertTowerCount > 0 ? `${alertTowerCount} Critical` : '0 Nominal'}
+                </span>
+                <span className="text-[11px] text-zinc-400 block font-mono mt-0.5">
+                  {alertTowerCount > 0 ? 'Radar Beacon Active' : 'Passive Monitoring'}
+                </span>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-700/60 flex items-center justify-center text-red-400">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-[#0e0e0e] border border-zinc-800 shadow-md flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block font-bold">
+                  INFRASOUND ARRAY
+                </span>
+                <span className="text-xl sm:text-2xl font-mono font-extrabold text-amber-400">14–35 Hz</span>
+                <span className="text-[11px] text-amber-300 block font-mono mt-0.5">Kadaba Fringe Corridor</span>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-700/60 flex items-center justify-center text-amber-400">
+                <Volume2 className="w-5 h-5" />
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-[#0e0e0e] border border-zinc-800 shadow-md flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block font-bold">
+                  RAPID PATROL READINESS
+                </span>
+                <span className="text-xl sm:text-2xl font-mono font-extrabold text-white">5 Strike Camps</span>
+                <span className="text-[11px] text-emerald-400 block font-mono mt-0.5">VHF 154.250 MHz Linked</span>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-700/60 flex items-center justify-center text-white">
+                <Shield className="w-5 h-5" />
+              </div>
             </div>
           </div>
 
-          {/* Interactive Split Operations Grid: Left = Leaflet Map (65%), Right = Audio Screening (35%) */}
+          {/* Core Operations Deck: Left Tactical Leaflet GIS (65%) + Right Live Screening (35%) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            {/* Satellite Operations Map */}
-            <div className="lg:col-span-7 xl:col-span-8 h-[540px] lg:h-[620px]">
+            <div className="lg:col-span-7 xl:col-span-8 h-[560px] lg:h-[640px]">
               <OperationsMap
                 towers={towers}
                 selectedTowerId={selectedTower.id}
@@ -633,8 +1203,7 @@ export default function App() {
               />
             </div>
 
-            {/* Live Audio Ingestion & Screening Module */}
-            <div ref={audioModuleRef} className="lg:col-span-5 xl:col-span-4">
+            <div className="lg:col-span-5 xl:col-span-4">
               <AudioIngestionModule
                 towers={towers}
                 selectedTower={selectedTower}
@@ -643,197 +1212,242 @@ export default function App() {
               />
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* =========================================================================
-          SECTION 4: CRISP WHITE/LIGHT-GREY SHOWCASE SECTION (Explore Threat Signatures)
-          Matching "Explore Our Animals" from Bearizona reference
-          ========================================================================= */}
-      <section className="bg-[#f4f4f5] text-zinc-900 px-6 sm:px-10 py-16 border-b border-zinc-300">
-        <div className="max-w-7xl mx-auto space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="text-xs font-mono text-emerald-700 uppercase tracking-widest block font-bold">
-                BIOACOUSTIC RECONNAISSANCE PROFILES
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight">
-                Explore Target <span className="font-serif italic text-emerald-700 font-normal">Threat Signatures</span>
-              </h2>
-            </div>
-            <span className="text-xs font-mono text-zinc-600 hidden sm:inline">
-              Multi-Spectral Neural Matching
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* 1. Chainsaw Motor Card */}
-            <div className="group rounded-2xl overflow-hidden bg-white border border-zinc-200/90 hover:border-red-500 hover:shadow-2xl transition-all flex flex-col justify-between shadow-sm">
-              <div className="relative h-44 overflow-hidden">
-                <img
-                  src={chainsawTimberImg}
-                  alt="Chainsaw motor timber felling"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute top-2 right-2 px-2.5 py-0.5 rounded text-[10px] font-mono bg-red-600 text-white font-bold uppercase shadow">
-                  CRITICAL THREAT
-                </div>
-              </div>
-              <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-sm font-bold text-zinc-900 group-hover:text-red-600 transition-colors">
-                    Chainsaw Motor (2-Stroke)
-                  </h3>
-                  <p className="text-[11px] text-zinc-600 mt-1 line-clamp-2">
-                    Two-stroke engine scream (110–260 Hz fundamental + tooth cutting friction rasp).
-                  </p>
-                </div>
-                <div className="pt-2 border-t border-zinc-100 flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-red-600">88.4% Confidence</span>
-                  <button
-                    onClick={() => handleTriggerDrill('chainsaw', 'TOWER-A')}
-                    className="px-3 py-1 text-[11px] font-semibold bg-red-50 hover:bg-red-100 text-red-700 rounded-lg border border-red-200 transition-colors"
-                  >
-                    Simulate
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* 2. Asian Elephant Card */}
-            <div className="group rounded-2xl overflow-hidden bg-white border border-zinc-200/90 hover:border-amber-500 hover:shadow-2xl transition-all flex flex-col justify-between shadow-sm">
-              <div className="relative h-44 overflow-hidden">
-                <img
-                  src={heroElephantImg}
-                  alt="Asian Elephant Herd"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute top-2 right-2 px-2.5 py-0.5 rounded text-[10px] font-mono bg-amber-600 text-white font-bold uppercase shadow">
-                  CONFLICT RISK
-                </div>
-              </div>
-              <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-sm font-bold text-zinc-900 group-hover:text-amber-600 transition-colors">
-                    Asian Elephant Herd
-                  </h3>
-                  <p className="text-[11px] text-zinc-600 mt-1 line-clamp-2">
-                    Infrasonic chest rumbles (18–35 Hz) and loud formant trumpeting near Kadaba fringe.
-                  </p>
-                </div>
-                <div className="pt-2 border-t border-zinc-100 flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-amber-700">91.2% Confidence</span>
-                  <button
-                    onClick={() => handleTriggerDrill('elephant', 'TOWER-C')}
-                    className="px-3 py-1 text-[11px] font-semibold bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-lg border border-amber-200 transition-colors"
-                  >
-                    Simulate
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* 3. Monsoon Rainforest Canopy Card */}
-            <div className="group rounded-2xl overflow-hidden bg-white border border-zinc-200/90 hover:border-emerald-500 hover:shadow-2xl transition-all flex flex-col justify-between shadow-sm">
-              <div className="relative h-44 overflow-hidden">
-                <img
-                  src={canopyLandscapeImg}
-                  alt="Kudremukh Monsoon Canopy"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute top-2 right-2 px-2.5 py-0.5 rounded text-[10px] font-mono bg-emerald-700 text-white font-bold uppercase shadow">
-                  BASELINE (CLEAR)
-                </div>
-              </div>
-              <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-sm font-bold text-zinc-900 group-hover:text-emerald-700 transition-colors">
-                    Monsoon Canopy Baseline
-                  </h3>
-                  <p className="text-[11px] text-zinc-600 mt-1 line-clamp-2">
-                    Continuous tropical rain patter, canopy leaf rustle, and high-frequency cicada pulses.
-                  </p>
-                </div>
-                <div className="pt-2 border-t border-zinc-100 flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-emerald-700">95.0% Normal</span>
-                  <button
-                    onClick={() => {
-                      audioEngine.createAmbientBuffer().then((buf) => audioEngine.playBuffer(buf));
-                    }}
-                    className="px-3 py-1 text-[11px] font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-lg border border-emerald-200 transition-colors"
-                  >
-                    Listen
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* 4. Bengal Tiger Apex Corridor Card */}
-            <div className="group rounded-2xl overflow-hidden bg-white border border-zinc-200/90 hover:border-zinc-500 hover:shadow-2xl transition-all flex flex-col justify-between shadow-sm">
-              <div className="relative h-44 overflow-hidden">
-                <img
-                  src={tigerPortraitImg}
-                  alt="Royal Bengal Tiger Corridor"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute top-2 right-2 px-2.5 py-0.5 rounded text-[10px] font-mono bg-zinc-800 text-white font-bold uppercase shadow">
-                  CORRIDOR GUARD
-                </div>
-              </div>
-              <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-sm font-bold text-zinc-900 group-hover:text-zinc-600 transition-colors">
-                    Tiger Migratory Corridor
-                  </h3>
-                  <p className="text-[11px] text-zinc-600 mt-1 line-clamp-2">
-                    Kudremukh to Pushpagiri contiguous corridor protected against vehicular and snare poaching.
-                  </p>
-                </div>
-                <div className="pt-2 border-t border-zinc-100 flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-zinc-700">Protected Zone</span>
-                  <button
-                    onClick={() => setIsPatrolModalOpen(true)}
-                    className="px-3 py-1 text-[11px] font-semibold bg-zinc-100 hover:bg-zinc-200 text-zinc-900 rounded-lg border border-zinc-300 transition-colors"
-                  >
-                    View Units
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION 5: SENTINEL ARRAY HARDWARE TELEMETRY SECTION (Charcoal / Neutral)
-          ========================================================================= */}
-      <section ref={towersSectionRef} className="bg-[#0e0e0e] px-6 sm:px-10 py-12 border-b border-zinc-800">
-        <div className="max-w-7xl mx-auto space-y-4">
+          {/* Sentinel Array 5-Node Health Grid */}
           <SentinelGridHealth
             towers={towers}
             selectedTowerId={selectedTower.id}
             onSelectTower={handleSelectTower}
             onTriggerTestAcoustic={(tower, type) => handleTriggerDrill(type, tower.id)}
           />
-        </div>
-      </section>
 
-      {/* =========================================================================
-          SECTION 6: INCIDENT LOG & OPERATIONS TABLE SECTION (Pure Black / Neutral)
-          ========================================================================= */}
-      <section ref={incidentsLogRef} className="bg-black px-6 sm:px-10 py-12 border-b border-zinc-800">
-        <div className="max-w-7xl mx-auto space-y-4">
+          {/* Compact Incident Log Register */}
           <IncidentLogTable
             incidents={incidents}
             onSelectIncident={handleSelectIncident}
             onAcknowledge={handleAcknowledgeIncident}
           />
-        </div>
-      </section>
+        </main>
+      )}
+
+      {/* =========================================================================
+          VIEW MODE 2: ACOUSTIC PLAYGROUND & MODEL INSPECTION
+          ========================================================================= */}
+      {activeView === 'playground' && (
+        <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-8 space-y-6">
+          <div className="border-b border-zinc-800 pb-4">
+            <div className="flex items-center gap-2">
+              <Activity className="w-5 h-5 text-emerald-400" />
+              <h2 className="text-xl font-extrabold text-white">Bioacoustic Model Playground & Audio Lab</h2>
+            </div>
+            <p className="text-xs text-zinc-400 mt-1">
+              Test live microphone audio, inspect zero-crossing rates, and explore synthetic Western Ghats signatures.
+            </p>
+          </div>
+
+          <AudioIngestionModule
+            towers={towers}
+            selectedTower={selectedTower}
+            onSelectTower={setSelectedTower}
+            onThreatInference={handleThreatInference}
+          />
+
+          {/* Model Specification Card Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+            <div className="p-5 rounded-2xl bg-[#0e0e0e] border border-zinc-800 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-red-400 uppercase font-mono">Chainsaw Motor Neural Model</span>
+                <span className="text-[10px] font-mono text-zinc-500">v2.4.1</span>
+              </div>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                Discriminates two-stroke combustion spikes (110–260 Hz) and timber cutting tooth chatter against background wind shears.
+              </p>
+              <div className="pt-2 text-[11px] font-mono text-zinc-400 border-t border-zinc-800/80">
+                Confidence Threshold: &gt; 75.0% · ZCR Filter: &gt; 0.55
+              </div>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[#0e0e0e] border border-zinc-800 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-amber-400 uppercase font-mono">Pachyderm Infrasound Model</span>
+                <span className="text-[10px] font-mono text-zinc-500">v1.9.8</span>
+              </div>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                Isolates subterranean 14–35 Hz chest rumbles and resonant harmonic trumpeting (220–550 Hz) for agricultural conflict prevention.
+              </p>
+              <div className="pt-2 text-[11px] font-mono text-zinc-400 border-t border-zinc-800/80">
+                Infrasound Ratio: &gt; 0.65 · Corridor Focus: Kadaba Fringe
+              </div>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[#0e0e0e] border border-zinc-800 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-emerald-400 uppercase font-mono">Canopy Ambient Baseline</span>
+                <span className="text-[10px] font-mono text-zinc-500">Continuous</span>
+              </div>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                Adaptive baseline tracker eliminating false alarms from monsoon raindrops, cicada stridulation (5–7 kHz), and canopy gusts.
+              </p>
+              <div className="pt-2 text-[11px] font-mono text-zinc-400 border-t border-zinc-800/80">
+                Auto-Calibrating Noise Floor · SNR Target: &gt; 12 dB
+              </div>
+            </div>
+          </div>
+        </main>
+      )}
+
+      {/* =========================================================================
+          VIEW MODE 3: INCIDENT REGISTER & FORENSIC LOG
+          ========================================================================= */}
+      {activeView === 'incidents' && (
+        <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-8 space-y-6">
+          <div className="border-b border-zinc-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div className="flex items-center gap-2">
+                <ShieldAlert className="w-5 h-5 text-amber-400" />
+                <h2 className="text-xl font-extrabold text-white">Western Ghats Forensic Incident Register</h2>
+              </div>
+              <p className="text-xs text-zinc-400 mt-1">
+                Admissible acoustic evidence records under Section 27, Karnataka Forest Act 1963.
+              </p>
+            </div>
+
+            <button
+              onClick={() => handleTriggerDrill('chainsaw')}
+              className="px-4 py-2 rounded-xl text-xs font-bold bg-red-600 hover:bg-red-500 text-white flex items-center gap-2 shadow-lg self-start sm:self-auto"
+            >
+              <AlertTriangle className="w-3.5 h-3.5" />
+              <span>Simulate Incident</span>
+            </button>
+          </div>
+
+          <IncidentLogTable
+            incidents={incidents}
+            onSelectIncident={handleSelectIncident}
+            onAcknowledge={handleAcknowledgeIncident}
+          />
+        </main>
+      )}
+
+      {/* =========================================================================
+          VIEW MODE 4: FIELD PATROL DEPLOYMENTS & STRIKE CAMPS
+          ========================================================================= */}
+      {activeView === 'patrols' && (
+        <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-8 space-y-6">
+          <div className="border-b border-zinc-800 pb-4">
+            <div className="flex items-center gap-2">
+              <Users className="w-5 h-5 text-emerald-400" />
+              <h2 className="text-xl font-extrabold text-white">Karnataka Forest Dept Tactical Deployments</h2>
+            </div>
+            <p className="text-xs text-zinc-400 mt-1 font-kannada">
+              ಪಶ್ಚಿಮ ಘಟ್ಟಗಳ ಅರಣ್ಯ ಸಂರಕ್ಷಣಾ ಗಸ್ತು ಪಡೆಗಳು · 5 Strike Units on Active Standby
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {PATROL_UNITS_DATA.map((unit) => (
+              <div
+                key={unit.id}
+                className="p-5 rounded-2xl bg-[#0e0e0e] border border-zinc-800 space-y-3 shadow-lg"
+              >
+                <div className="flex items-center justify-between border-b border-zinc-800 pb-2.5">
+                  <div>
+                    <span className="font-mono text-xs font-bold text-emerald-400 mr-2">{unit.id}</span>
+                    <span className="font-bold text-white text-sm">{unit.name}</span>
+                  </div>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
+                    unit.status === 'dispatched' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                  }`}>
+                    {unit.status}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs font-mono text-zinc-300">
+                  <div>
+                    <span className="text-[10px] text-zinc-500 block">CALL SIGN</span>
+                    <span>{unit.callSign}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-zinc-500 block">LEAD OFFICER</span>
+                    <span>{unit.leadOfficer}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-zinc-500 block">RADIO FREQ</span>
+                    <span className="text-emerald-400">{unit.contactFreq}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-zinc-500 block">PERSONNEL</span>
+                    <span>{unit.personnelCount} Armed Rangers</span>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-zinc-800 text-xs text-zinc-400 font-mono">
+                  Vehicle: <span className="text-white">{unit.vehicle}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </main>
+      )}
+
+      {/* =========================================================================
+          VIEW MODE 5: SYSTEM ARCHITECTURE & ENTERPRISE SPECIFICATIONS
+          ========================================================================= */}
+      {activeView === 'architecture' && (
+        <main className="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-8 space-y-8">
+          <div className="border-b border-zinc-800 pb-4">
+            <div className="flex items-center gap-2">
+              <Server className="w-5 h-5 text-emerald-400" />
+              <h2 className="text-xl font-extrabold text-white">Platform Architecture & Technical Specifications</h2>
+            </div>
+            <p className="text-xs text-zinc-400 mt-1">
+              Enterprise bioacoustic engineering blueprint designed for UNESCO Western Ghats protected zones.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-6 rounded-2xl bg-[#0e0e0e] border border-zinc-800 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-700 flex items-center justify-center text-emerald-400 font-bold">
+                01
+              </div>
+              <h3 className="text-base font-bold text-white">Edge Sentinel Hardware Array</h3>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                Autonomous 12V 40W monocrystalline solar-powered masts equipped with high-sensitivity MEMS omnidirectional capsules and 14–35 Hz infrasonic geophones. Dual LoRaWAN + 4G cellular telemetry links back to Kudremukh forest command.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-[#0e0e0e] border border-zinc-800 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-700 flex items-center justify-center text-emerald-400 font-bold">
+                02
+              </div>
+              <h3 className="text-base font-bold text-white">Bioacoustic Signal Processing</h3>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                48 kHz / 16-bit PCM analysis pipeline calculating real-time Zero-Crossing Rates (ZCR), Spectral Centroid frequencies, and Mel-Frequency spectral bands. Strict confidence score filtering triggers red alerts only above the 75% boundary.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-[#0e0e0e] border border-zinc-800 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-700 flex items-center justify-center text-amber-400 font-bold">
+                03
+              </div>
+              <h3 className="text-base font-bold text-white">Bilingual Telegram & SMS Gateway</h3>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                Synchronous emergency broadcast engine firing automated notifications in both English and Kannada to 14 beat guards and 3 gram panchayats within 800 milliseconds of threat confirmation.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-[#0e0e0e] border border-zinc-800 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-700 flex items-center justify-center text-amber-400 font-bold">
+                04
+              </div>
+              <h3 className="text-base font-bold text-white">Forensic Evidentiary Logging</h3>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                Every acoustic event captures raw waveform scrubbers, spectral centroids, GPS coordinates, and timestamp logs, exportable directly to CSV for court filings under Section 27 of the Karnataka Forest Act 1963.
+              </p>
+            </div>
+          </div>
+        </main>
+      )}
 
       {/* Incident Operations Drawer */}
       <IncidentDrawer
@@ -859,27 +1473,27 @@ export default function App() {
       />
 
       {/* =========================================================================
-          COMPREHENSIVE PROFESSIONAL FOOTER (Official Logo, Links, Dispatch Hotline)
+          ENTERPRISE MULTI-COLUMN FOOTER WITH 100% VISIBLE WHITE LOGO CONTAINER
           ========================================================================= */}
-      <footer className="bg-[#050505] text-zinc-400 border-t border-zinc-800 pt-16 pb-12 px-6 sm:px-10">
+      <footer className="bg-[#050505] text-zinc-400 border-t border-zinc-800 pt-16 pb-12 px-6 sm:px-10 mt-auto">
         <div className="max-w-7xl mx-auto space-y-12">
           {/* Main Footer Multi-Column Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
             {/* Column 1 & 2: Brand Identity & Official Logo */}
             <div className="lg:col-span-2 space-y-4">
               <div className="flex items-center gap-3">
-                <div className="p-1 rounded-xl bg-white/10 border border-zinc-700 inline-block">
+                <div className="bg-white p-3 rounded-2xl shadow-2xl border border-white inline-block">
                   <img
                     src={ARANYA_LOGO_SRC}
                     alt="Aranya-Drishti Logo"
                     referrerPolicy="no-referrer"
-                    className="h-12 w-auto object-contain rounded"
+                    className="h-12 sm:h-14 w-auto object-contain block"
                   />
                 </div>
               </div>
 
               <p className="text-xs text-zinc-300 leading-relaxed max-w-sm">
-                <strong>Aranya-Drishti (ಅರಣ್ಯ ದೃಷ್ಟಿ)</strong> is the autonomous acoustic intelligence platform
+                <strong>Aranya-Drishti (ಅರಣ್ಯ ದೃಷ್ಟಿ)</strong> is the enterprise autonomous acoustic intelligence platform
                 deployed across the Western Ghats Biosphere Reserve. Developed to detect covert chainsaw timber
                 felling and mitigate human-elephant conflict through real-time infrasound & vibration neural models.
               </p>
@@ -896,19 +1510,19 @@ export default function App() {
                 Sentinel Array (5 Nodes)
               </h4>
               <ul className="space-y-2 text-zinc-400 font-mono text-[11px]">
-                <li className="hover:text-white transition-colors cursor-pointer" onClick={() => handleSelectTower(towers[0])}>
+                <li className="hover:text-white transition-colors cursor-pointer" onClick={() => { setActiveView('console'); handleSelectTower(towers[0]); }}>
                   • Tower A: Kudremukh North (13.234° N)
                 </li>
-                <li className="hover:text-white transition-colors cursor-pointer" onClick={() => handleSelectTower(towers[1])}>
+                <li className="hover:text-white transition-colors cursor-pointer" onClick={() => { setActiveView('console'); handleSelectTower(towers[1]); }}>
                   • Tower B: Netravati Buffer (13.082° N)
                 </li>
-                <li className="hover:text-white transition-colors cursor-pointer" onClick={() => handleSelectTower(towers[2])}>
+                <li className="hover:text-white transition-colors cursor-pointer" onClick={() => { setActiveView('console'); handleSelectTower(towers[2]); }}>
                   • Tower C: Kadaba Fringe (12.784° N)
                 </li>
-                <li className="hover:text-white transition-colors cursor-pointer" onClick={() => handleSelectTower(towers[3])}>
+                <li className="hover:text-white transition-colors cursor-pointer" onClick={() => { setActiveView('console'); handleSelectTower(towers[3]); }}>
                   • Tower D: Shiradi Foothills (12.928° N)
                 </li>
-                <li className="hover:text-white transition-colors cursor-pointer" onClick={() => handleSelectTower(towers[4])}>
+                <li className="hover:text-white transition-colors cursor-pointer" onClick={() => { setActiveView('console'); handleSelectTower(towers[4]); }}>
                   • Tower E: Nagarhole Border (12.583° N)
                 </li>
               </ul>

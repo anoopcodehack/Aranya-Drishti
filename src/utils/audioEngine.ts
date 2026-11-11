@@ -191,6 +191,74 @@ class AudioEngine {
   }
 
   /**
+   * Generates a Bengal Tiger territorial roar / chuff buffer (3.6s)
+   * Deep guttural resonance (60-120 Hz) with raw formant growl
+   */
+  public async createTigerBuffer(): Promise<AudioBuffer> {
+    const ctx = this.getAudioContext();
+    const duration = 3.6;
+    const sampleRate = ctx.sampleRate;
+    const buffer = ctx.createBuffer(1, sampleRate * duration, sampleRate);
+    const data = buffer.getChannelData(0);
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate;
+      let sample = 0;
+
+      // Roar envelope (build up then decay)
+      let env = 0;
+      if (t < 0.5) env = t / 0.5;
+      else if (t < 2.8) env = 1.0 - (t - 0.5) / 3.5;
+      else env = Math.max(0, (3.6 - t) / 0.8);
+
+      // Low fundamental growl (75 Hz fluctuating)
+      const f0 = 75 + Math.sin(t * 12) * 8;
+      const guttural = Math.sin(2 * Math.PI * f0 * t) * 0.5;
+      const h2 = Math.sin(2 * Math.PI * (f0 * 2.1) * t) * 0.35;
+      const h3 = Math.sin(2 * Math.PI * (f0 * 3.2) * t) * 0.2;
+      
+      // Throat rasp modulation
+      const rasp = (Math.random() * 2 - 1) * 0.25 * (0.8 + 0.2 * Math.sin(2 * Math.PI * 18 * t));
+
+      sample = (guttural + h2 + h3 + rasp) * env * 0.85;
+      data[i] = Math.max(-1, Math.min(1, sample));
+    }
+
+    return buffer;
+  }
+
+  /**
+   * Generates a Lion-Tailed Macaque contact whoop / screech (2.8s)
+   */
+  public async createMacaqueBuffer(): Promise<AudioBuffer> {
+    const ctx = this.getAudioContext();
+    const duration = 2.8;
+    const sampleRate = ctx.sampleRate;
+    const buffer = ctx.createBuffer(1, sampleRate * duration, sampleRate);
+    const data = buffer.getChannelData(0);
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate;
+      let sample = 0;
+
+      // Repeated whoop bursts
+      const burstTime = t % 0.7;
+      if (burstTime < 0.45) {
+        const bEnv = Math.sin((burstTime / 0.45) * Math.PI);
+        // Frequency sweep (650 Hz up to 1350 Hz)
+        const freq = 650 + (burstTime / 0.45) * 700;
+        const tone = Math.sin(2 * Math.PI * freq * t);
+        const overtone = Math.sin(2 * Math.PI * (freq * 1.8) * t) * 0.3;
+        sample = (tone + overtone) * bEnv * 0.7;
+      }
+
+      data[i] = Math.max(-1, Math.min(1, sample));
+    }
+
+    return buffer;
+  }
+
+  /**
    * Play an AudioBuffer and hook it up to the AnalyserNode
    */
   public playBuffer(
