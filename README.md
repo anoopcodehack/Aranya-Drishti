@@ -1,13 +1,22 @@
-# 🌲 Aranya-Drishti (ಅರಣ್ಯ ದೃಷ್ಟಿ)
-### Autonomous Acoustic Surveillance Command Center & Wildlife Biosphere Portal
+<p align="center">
+  <picture>
+    <img src="public/assets/aistudio/image_033d2753.png" alt="Aranya-Drishti — See · Protect · Preserve" width="420" style="background-color: #ffffff; padding: 20px 28px; border-radius: 20px; box-shadow: 0 12px 32px rgba(0,0,0,0.25); border: 1px solid #ffffff; max-width: 100%;" />
+  </picture>
+</p>
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-19.0-61dafb.svg?style=flat-square&logo=react)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-8.3-646cff.svg?style=flat-square&logo=vite)](https://vitejs.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38b2ac.svg?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
-[![Leaflet](https://img.shields.io/badge/Leaflet-GIS_Mapping-199900.svg?style=flat-square&logo=leaflet)](https://leafletjs.com/)
-[![Web Audio API](https://img.shields.io/badge/Web_Audio_API-Synthesized_DSP-emerald.svg?style=flat-square)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
-[![License](https://img.shields.io/badge/License-Apache_2.0-green.svg?style=flat-square)](LICENSE)
+<h1 align="center">🌲 Aranya-Drishti (ಅರಣ್ಯ ದೃಷ್ಟಿ)</h1>
+<h3 align="center">Autonomous Acoustic Surveillance Command Center & Wildlife Biosphere Portal</h3>
+<p align="center"><em>Western Ghats Biosphere Reserve · Kudremukh Wildlife Division · Karnataka Forest Department</em></p>
+
+<p align="center">
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.7-blue.svg?style=flat-square&logo=typescript" alt="TypeScript" /></a>
+  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19.0-61dafb.svg?style=flat-square&logo=react" alt="React" /></a>
+  <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-8.3-646cff.svg?style=flat-square&logo=vite" alt="Vite" /></a>
+  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_CSS-v4.0-38b2ac.svg?style=flat-square&logo=tailwind-css" alt="Tailwind CSS" /></a>
+  <a href="https://leafletjs.com/"><img src="https://img.shields.io/badge/Leaflet-GIS_Mapping-199900.svg?style=flat-square&logo=leaflet" alt="Leaflet" /></a>
+  <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API"><img src="https://img.shields.io/badge/Web_Audio_API-Synthesized_DSP-emerald.svg?style=flat-square" alt="Web Audio API" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-green.svg?style=flat-square" alt="License" /></a>
+</p>
 
 > **Aranya-Drishti** (*Sanskrit / Kannada: "The Vision of the Forest" — See · Protect · Preserve*) is an enterprise-grade autonomous acoustic intelligence platform and conservation command center engineered for the Karnataka Forest Department (Kudremukh Wildlife Division). It combines an editorial wildlife sanctuary experience portal with real-time tactical surveillance, edge bioacoustic AI inference, and automated bilingual alert dispatch.
 
