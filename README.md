@@ -41,6 +41,7 @@
 - [Standard Operating Procedure (SOP) & Legal Protocol](#-standard-operating-procedure-sop--legal-protocol)
 - [Company Software Development Standards](#-company-software-development-standards)
 - [License & Acknowledgments](#-license--acknowledgments)
+- [Project Team & Submission Details](#-project-team--submission-details)
 
 ---
 
@@ -367,6 +368,16 @@ To maintain professional engineering hygiene, contributions must adhere to the f
 - **License**: Distributed under the **Apache 2.0 License**. See [LICENSE](LICENSE) for details.
 - **Field Data Grounding**: Western Ghats Forest Division & Kudremukh Wildlife Division GIS coordinates.
 - **Acoustic Standards**: Formulated in accordance with bioacoustic monitoring standards for the Asian Elephant (*Elephas maximus*) and motorized two-stroke forestry equipment.
+
+---
+
+## 👥 Project Team & Submission Details
+
+| Parameter | Details |
+| :--- | :--- |
+| **Track Name** | **TPS3 — VASUNDHARA \| PROTECTING INDIA'S NATURAL WEALTH** |
+| **Team Name** | **PHONEIX** |
+| **Team Members** | **ASHITH.C** · **ANOOP - A** · **SHRIRAKSHA S H** |
 
 ---
 
