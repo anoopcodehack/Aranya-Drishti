@@ -5,6 +5,7 @@
   --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --font-kannada: 'Noto Sans Kannada', sans-serif;
+  --font-display: 'Fraunces', 'Playfair Display', Georgia, serif;
 }
 
 /* Custom Leaflet Map styling for tactical dark ops map */
